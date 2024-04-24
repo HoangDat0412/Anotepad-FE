@@ -1,0 +1,15 @@
+// .home{
+//     height: 93vh;
+//     overflow-y: scroll;
+// }
+
+.bard-hello {
+    position: relative;
+    display: inline-block;
+    color: transparent;
+    background: linear-gradient(74deg, #4285f4 0, #9b72cb 9%, #d96570 20%, #d96570 24%, #9b72cb 35%, #4285f4 44%, #9b72cb 50%, #d96570 56%, #fff 75%, #fff 100%);
+    background-size: 400% 100%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}

@@ -1,0 +1,18 @@
+.displayContent {
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 0 5px #333 inset;
+    padding: 3% 5%;
+    outline: none;
+}
+
+.feature{
+    h2 {
+        font-size: 1.8em;
+        margin-bottom: .7em;
+    }
+    a {
+        color: #10589b;
+    }
+}

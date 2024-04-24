@@ -1,0 +1,50 @@
+.prompt-container{
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+    -moz-box-orient: vertical;
+    -moz-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-box-pack: justify;
+    -webkit-justify-content: space-between;
+    -moz-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    height: 12.5rem;
+    width: 12rem;
+    border-radius: 12px;
+    background-color: #f0f4f9;
+    color: #1f1f1f;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    overflow: hidden;
+    &:hover {
+        background-color: #dde3ea;
+        cursor: pointer;
+    }
+}
+
+.prompt-text-content {
+    
+}
+
+.prompt-icon-container {
+    height: 2.5rem;
+    width: 2.5rem;
+    background-color: #fff;
+    border-radius: 50%;
+    display: flex;
+    -webkit-box-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+ 
+    align-items: center;
+    
+
+    align-self: end;
+}
