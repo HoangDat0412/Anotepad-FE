@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef} from 'react'
 import { editPermissionApi, getNote} from '../../redux/features/note/noteSlice';
 
 import { useParams } from 'react-router-dom';
@@ -9,13 +9,17 @@ import { EmailShareButton, FacebookMessengerShareButton, FacebookShareButton, Li
 import { DOMAIN_FE } from '../../utils/config';
 
 export default function TaskListViewOnly() {
-  useEffect(() => {
-    window.scrollTo(0, 0);
-    dispatch(getNote(param.id))
-  }, []);
+
   const param = useParams()
   const dispatch = useDispatch()
-
+  const fetchData = useCallback(() => {
+    dispatch(getNote(param.id));
+  }, [dispatch,param.id]);
+  
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    fetchData();
+  }, [fetchData]);
   const passwordAccess = useRef("")
   const handleEdit = () => {
     dispatch(editPermissionApi({
@@ -33,7 +37,7 @@ export default function TaskListViewOnly() {
           <div className='d-flex justify-content-between mt-2 '>
         <h1 className='bard-hello'>{noteDetail?.note?.note_type}</h1>
         <div class="dropdown">
-          <button style={{ fontWeight: "bold" }} class="btn text-primary btn-default dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+          <button style={{ fontWeight: "bold" }} class="button-8 dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
             Share
           </button>
           <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" style={{ width: "240px" }}>
@@ -67,19 +71,23 @@ export default function TaskListViewOnly() {
       <div class="mb-3">
         <input type="text" class="form-control" value={noteDetail?.note?.title}  placeholder='Note Title' />
       </div>
-      <table class="table mt-3 mb-3">
-        <thead>
-          <tr>
-            <th scope="col">TaskName</th>
-            <th scope="col">Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {TaskList?.map((item) => (
-            <TaskItem item={item} key={item.id} edit={false}/>
-          ))}
-        </tbody>
-      </table>
+      <table class="table table-striped mt-3 mb-3">
+          <thead>
+            <tr>
+              <th scope="col">TaskName</th>
+              <th scope="col">Status</th>
+              <th scope="col">Deadline</th>
+              <th scope="col"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              TaskList?.map((item, index) => (
+                <TaskItem item={item} key={item?.id} edit={false} />
+              ))
+            }
+          </tbody>
+        </table>
 
 
     </form>

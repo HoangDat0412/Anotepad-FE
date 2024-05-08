@@ -1,9 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { TOKEN, USER_LOGIN } from '../../../utils/config';
 
-// const thongTinNguoiDung = localStorage.getItem("THONG_TIN_NGUOI_DUNG")
-// ? JSON.parse(localStorage.getItem("THONG_TIN_NGUOI_DUNG"))
-// : {};
 
 const initialState = {
     TaskList:[]

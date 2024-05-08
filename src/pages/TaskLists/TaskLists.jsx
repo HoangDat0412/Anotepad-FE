@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import "./tasklists.scss"
 import { useSelector, useDispatch } from 'react-redux'
 import { addTask, setTask } from '../../redux/features/TaskList/TaskList'
@@ -9,16 +9,23 @@ import { getListFolder } from '../../redux/features/folder/folderSlice'
 import { useNavigate } from 'react-router-dom'
 export default function TaskLists() {
   const dispatch = useDispatch()
-  useEffect(()=>{
-    dispatch(getListFolder())
-    dispatch(setTask([]))
-  },[])
-  const {listFolder } = useSelector(state => state.folderSlice)
+  const clearTasks = useCallback(() => {
+    dispatch(setTask([]));
+  }, [dispatch]);
+
+  const fetchListFolder = useCallback(() => {
+    dispatch(getListFolder());
+  }, [dispatch]);
+  useEffect(() => {
+    clearTasks()
+    fetchListFolder()
+  }, [clearTasks, fetchListFolder]);
+  const { listFolder } = useSelector(state => state.folderSlice)
   const { userInformation } = useSelector(state => state.userSlice)
   const { TaskList } = useSelector(state => state.taskListSlice)
-  const {createResult } = useSelector(state => state.noteSlice)
+  const { createResult } = useSelector(state => state.noteSlice)
   const navigate = useNavigate()
-  if(createResult){
+  if (createResult) {
     navigate(`/updatetasklist/${createResult?.id}`)
     dispatch(setCreateResultFalse())
   }
@@ -27,36 +34,42 @@ export default function TaskLists() {
   const folderRef = useRef(null)
   const password_accessRef = useRef(null)
   const password_editRef = useRef(null)
-  const newTaskRef = useRef(null);
+  const [newTask,setNewTask] = useState('') 
+  const [errNewTask, setErrorNewTask] = useState(false)
   const taskStatusRef = useRef(null);
-  const [errNewTask,setErrorNewTask] = useState(false)
   const [errTitle, setErrTitle] = useState(false);
+
+  const [deadline,setDeadline] = useState(null)
+  const [errDeadline,setErrDeadline] = useState(false)
   const handleAddNewTask = () => {
     const isChecked = taskStatusRef.current?.value;
-    const newTask = newTaskRef.current?.value;
-    checkNull(newTask) ? setErrorNewTask(false): setErrorNewTask("task must not null")
-    const flag = checkNull(newTask)
-    if(flag){
-
-      if(TaskList.length === 0){
+    checkNull(newTask) ? setErrorNewTask(false) : setErrorNewTask("task must not null")
+    checkNull(deadline) ? setErrDeadline(false) : setErrDeadline("dealine must not null")
+    const flag = checkNull(newTask) && checkNull(deadline)
+    
+    if (flag) {
+      if (TaskList.length === 0) {
         dispatch(addTask({
           id: 0,
           content: newTask,
-          status: isChecked
+          status: isChecked,
+          deadline: deadline
         }))
-      }else{
+      } else {
         dispatch(addTask({
-          id: TaskList[TaskList.length-1].id + 1,
+          id: TaskList[TaskList.length - 1].id + 1,
           content: newTask,
-          status: isChecked
+          status: isChecked,
+          deadline: deadline
         }))
       }
-
+      setDeadline("")
+      setNewTask("")
     }
   }
   const handleSubmit = () => {
     const titleValue = titleRef.current?.value;
-    !checkNull(titleValue) ? setErrTitle("Title không được bỏ trống") : setErrTitle(false)
+    !checkNull(titleValue) ? setErrTitle("Title must not null") : setErrTitle(false)
     const statusValue = statusRef.current?.value
     let folderValue = folderRef.current?.value
     if (folderValue === "Choose Folder") {
@@ -64,14 +77,14 @@ export default function TaskLists() {
     }
     const password_access = password_accessRef.current?.value
     const password_edit = password_editRef.current?.value
-    const flag =  checkNull(titleValue)
+    const flag = checkNull(titleValue)
     if (flag) {
       if (statusValue === "protected") {
         dispatch(createNote({
           title: titleValue,
           note_type: "TaskList",
           status: statusValue,
-          TaskList:TaskList,
+          TaskList: TaskList,
           folder_id: folderValue,
           password_access,
           password_edit
@@ -82,12 +95,11 @@ export default function TaskLists() {
           title: titleValue,
           note_type: "TaskList",
           status: statusValue,
-          TaskList:TaskList,
+          TaskList: TaskList,
           folder_id: folderValue,
         }))
 
       }
-
     }
   };
 
@@ -99,101 +111,104 @@ export default function TaskLists() {
           <input type="text" class="form-control" ref={titleRef} placeholder='Note Title' />
           {errTitle ? <p style={{ color: "red" }}>{errTitle}</p> : null}
         </div>
-
-        <div class="d-flex gap-2 align-items-start mb-4">
-          
-            <div data-mdb-input-init class="form-outline">
-              <input type="text" ref={newTaskRef} class="form-control" placeholder='Add new task here' />
-              {errNewTask ? <p style={{color:"red",margin:"0"}}>{errNewTask}</p> : null}
-            </div>
+        <div class="d-flex gap-2 align-items-end ">
+          <div data-mdb-input-init class="form-outline">
+            <label style={{fontSize:"14px"}} className="form-label">New Task</label>
+            <input type="text" value={newTask} onChange={(e) => setNewTask(e.target.value)} class="form-control" placeholder='Add new task here' />
             
-       
-
+          </div>
           <div >
+          <label style={{fontSize:"14px"}} className="form-label">Status</label>
             <select class="form-select" ref={taskStatusRef} >
-              <option value={false} >False</option>
-              <option value={true} >True</option>
+              <option value={false} >In Progress</option>
+              <option value={true} >Done</option>
             </select>
           </div>
-          <div >
-            <button type='button' className='btn btn-primary' onClick={() => handleAddNewTask()}>Add</button>
+          <div>
+          <label style={{fontSize:"14px"}} className="form-label">Deadline</label>
+            <input type="date" value={deadline} onChange={(e) => setDeadline(e.target.value)} class="form-control"/>
+          </div>
+          <div>
+            <button type='button' className='button-4' onClick={() => handleAddNewTask()}>Add Task</button>
           </div>
         </div>
-
-        <table class="table mt-3 mb-3">
+        <div className='d-flex'>
+        {errNewTask ? <p className='mb-4' style={{ color: "red", margin: "0" }}>{errNewTask}</p> : <p className='mb-4'></p>}
+        {errDeadline ? <p className='mb-4' style={{ color: "red", margin: "0" }}> ,  <span className='ps-1'>{errDeadline}</span></p> : <p className='mb-4'></p>}
+        </div>
+        {
+          TaskList?.length > 0 ?        <table class="table table-striped mt-3 mb-3">
           <thead>
             <tr>
-       
               <th scope="col">TaskName</th>
               <th scope="col">Status</th>
+              <th scope="col">Deadline</th>
               <th scope="col"></th>
-
             </tr>
           </thead>
           <tbody>
             {
-                  TaskList?.map((item,index) => (
-                    <TaskItem item={item} key={item?.id} edit={true}/>
-                  ))  
+              TaskList?.map((item, index) => (
+                <TaskItem item={item} key={item?.id} edit={true} />
+              ))
             }
           </tbody>
-        </table>
+        </table> : ""
+        }
 
 
 
         <select class="form-select mt-4" ref={folderRef} aria-label="Default select example">
           <option >Choose Folder</option>
-          {listFolder?.map((folder)=>(
+          {listFolder?.map((folder) => (
             <option value={folder?.id} >{folder?.name}</option>
           ))}
         </select>
 
         {userInformation?.user?.role === "GUEST" ? <select class="form-select mt-3" ref={statusRef} aria-label="Default select example" >
-          <option value="public">Public</option>
           <option value="private">Private</option>
-        </select> : <button type="button" class="btn btn-default mt-3" data-bs-toggle="modal" data-bs-target="#modelsetstatus">
+        </select> : <button type="button" class="button-4 mt-3" data-bs-toggle="modal" data-bs-target="#modelsetstatus">
           Note Read Permission
         </button>}
 
         <br />
 
 
-        <button type="button" onClick={() => handleSubmit()} class="btn btn-primary mt-3">Submit</button>
+        <button type="button" onClick={() => handleSubmit()} class="button-8 mt-3">Create TaskList</button>
       </form>
-
-      <div class="modal fade" id="modelsetstatus" tabindex="-1" aria-labelledby="modelsetstatus" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="modelsetstatus">Note Read Permission</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <form>
-                <select class="form-select mt-3" ref={statusRef}  >
-                  <option value="public">Public</option>
-                  <option value="private">Private</option>
-                  <option value="protected">Protected</option>
-                </select>
-
-                <div class="mb-3 mt-3">
-                  <input type="password" ref={password_accessRef} class="form-control" placeholder='Password For Protected Note' />
+          {
+            userInformation?.user?.role !== "GUEST" ?     <div class="modal fade" id="modelsetstatus" tabindex="-1" aria-labelledby="modelsetstatus" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="modelsetstatus">Note Read Permission</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-
-                <div class="mb-3 row">
-                  <label for="inputPassword" class="col-form-label">Note Edit Permission</label>
-                  <div class="">
-                    <input type="password" ref={password_editRef} class="form-control" placeholder='Editor Password' />
-                  </div>
+                <div class="modal-body">
+                  <form>
+                    <select class="form-select mt-3" ref={statusRef}  >
+                      <option value="public">Public</option>
+                      <option value="private">Private</option>
+                      <option value="protected">Protected</option>
+                    </select>
+    
+                    <div class="mb-3 mt-3">
+                      <input type="password" ref={password_accessRef} class="form-control" placeholder='Password For Protected Note' />
+                    </div>
+    
+                    <div class="mb-3 row">
+                      <label for="inputPassword" class="col-form-label">Note Edit Permission</label>
+                      <div class="">
+                        <input type="password" ref={password_editRef} class="form-control" placeholder='Editor Password' />
+                      </div>
+                    </div>
+                  </form>
                 </div>
-              </form>
+              </div>
             </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
-            </div>
-          </div>
-        </div>
-      </div>
+          </div> : ""
+          }
+  
     </div>
   )
 }

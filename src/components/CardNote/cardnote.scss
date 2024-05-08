@@ -27,6 +27,14 @@
         background-color: #dde3ea;
         cursor: pointer;
     }
+
+    a{
+        color: #623153;
+        transition: all 0.1s;
+        &:hover{
+            color: #8d3b5f;
+        }
+    }
 }
 
 .prompt-text-content {
@@ -36,15 +44,16 @@
 .prompt-icon-container {
     height: 2.5rem;
     width: 2.5rem;
-    background-color: #fff;
     border-radius: 50%;
     display: flex;
     -webkit-box-pack: center;
     justify-content: center;
     -webkit-box-align: center;
- 
     align-items: center;
-    
-
     align-self: end;
+    .button-45{
+        border-radius: 50%;
+        font-size: 14px;
+        padding: 6px;
+    }
 }

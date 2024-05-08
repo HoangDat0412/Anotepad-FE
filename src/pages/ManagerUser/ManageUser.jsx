@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteUser, getAllUser, getUserById, setEmail, setPassword, setRole, updateUserById } from '../../redux/features/user/userSlice';
-import { useNavigate } from 'react-router-dom';
 import { checkNull } from '../../validation/validation';
 
 
@@ -11,9 +10,13 @@ export default function ManageUser() {
     const { userList,userInfo } = useSelector(state => state.userSlice)
     const [errEmail,setErrEmail] = useState("")
     const [errPassword,setErrPassword] = useState("")
-    useEffect(() => {
-        dispatch(getAllUser())
-    }, [])
+    const fetchAllUser = useCallback(() => {
+        dispatch(getAllUser());
+      }, [dispatch]);
+      
+      useEffect(() => {
+        fetchAllUser();
+      }, [fetchAllUser]);
 
     const handleUpdate = () =>{
         !checkNull(userInfo?.user?.email) ? setErrEmail("email không được bỏ trống") : setErrEmail(false)
@@ -49,14 +52,16 @@ export default function ManageUser() {
                         {userList?.map(user => (
                             <tr key={user?.id}>
                                 <th scope="row">{user?.id}</th>
-                                <td>{user?.email}</td>
+                                <td>{user?.email || ""}</td>
                                 <td>{user?.role}</td>
                                 <td>
-                                    <button className='btn btn-danger' onClick={() => dispatch(deleteUser(user?.id))}>Delete</button>
+                                    <button className='button-45' onClick={() => dispatch(deleteUser(user?.id))}>Delete</button>
                                 </td>
-                                <td>
-                                    <button className='btn btn-success' data-bs-toggle="modal" data-bs-target="#updateuser" onClick={()=> dispatch(getUserById(user?.id))}>Update</button>
-                                </td>
+                                {
+                                    user?.role === "GUEST" ? "":                                <td>
+                                    <button className='button-8' data-bs-toggle="modal" data-bs-target="#updateuser" onClick={()=> dispatch(getUserById(user?.id))}>Update</button>
+                                </td> 
+                                }
                             </tr>
                         ))}
 

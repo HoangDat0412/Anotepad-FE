@@ -4,11 +4,6 @@ export default function Features() {
   return (
     <div className='container feature'>
       <div class="displayContent">
-        {/* <h2>Feature Request</h2> */}
-        {/* <div>
-          <a style={{color:"#10589b"}} ><b>Feedback Forum</b></a> - We'd love to hear your ideas, thoughts, and suggestions. Please submit your feedback or feature requests through our feedback forum.
-        </div> */}
-
         <h2 class="bard-hello">Getting Started</h2>
         <ul>
           <li>

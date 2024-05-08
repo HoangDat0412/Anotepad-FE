@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { createNote, getNote, setFolderAction, setPassword_accessAction, setPassword_editAction, setStatusAction, setTitleAction, updateNote } from '../../redux/features/note/noteSlice';
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import {  setFolderAction, setHighLightNote, setNoteHistory, setPassword_accessAction, setPassword_editAction, setStatusAction, setTitleAction, updateNote } from '../../redux/features/note/noteSlice';
 import { getListFolder } from '../../redux/features/folder/folderSlice';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,14 +9,21 @@ import { addTask } from '../../redux/features/TaskList/TaskList';
 import Comment from '../Comment/Comment';
 import { EmailShareButton, FacebookMessengerShareButton, FacebookShareButton, LinkedinShareButton, TelegramShareButton, TwitterShareButton } from 'react-share';
 import { DOMAIN_FE } from '../../utils/config';
+
 export default function TaskListUpdate() {
-  useEffect(() => {
-    window.scrollTo(0, 0);
-    dispatch(getNote(param.id))
-    dispatch(getListFolder())
-  }, []);
   const param = useParams()
   const dispatch = useDispatch()
+
+  const fetchData = useCallback(() => {
+    dispatch(getListFolder());
+    dispatch(setNoteHistory({
+      note_id:param.id
+    }))
+  }, [dispatch, param.id]);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    fetchData();
+  }, [fetchData]);
   const { listFolder } = useSelector(state => state.folderSlice)
   const { userInformation } = useSelector(state => state.userSlice)
   const { noteDetail } = useSelector(state => state.noteSlice)
@@ -77,61 +84,83 @@ export default function TaskListUpdate() {
     <div className='container'>
       <div className='d-flex justify-content-between mt-2 '>
         <h1 className='bard-hello'>{noteDetail?.note?.note_type}</h1>
-        <div class="dropdown">
-          <button style={{ fontWeight: "bold" }} class="btn text-primary btn-default dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-            Share
-          </button>
-          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" style={{ width: "240px" }}>
-            <div className='p-2 d-flex gap-4'>
-              <div>
-                <div className='mb-2 text-primary' >
-                  <FacebookShareButton url={shareUrl}><i class="fa-brands fa-facebook me-1"></i> Facebook</FacebookShareButton>
-                </div>
-                <div className='mb-2 text-primary'><EmailShareButton url={shareUrl}><i class="fa-solid fa-envelope me-1"></i> Email</EmailShareButton></div>
-                <div className='mb-2 text-primary'><LinkedinShareButton url={shareUrl}><i class="fa-brands fa-linkedin me-1"></i> Linkedin</LinkedinShareButton></div>
+        <div className='d-flex align-items-center gap-3'>
+          {noteDetail?.note?.user_id === userInformation?.user?.id ? <div>
+            {
+              !noteDetail?.note?.highlight ? <i onClick={() => dispatch(setHighLightNote(param.id))} style={{ fontSize: "20px", color: "#9c9c9f" }} class="fa-solid fa-star"></i> : <i onClick={() => dispatch(setHighLightNote(param.id))} style={{ fontSize: "20px", color: "rgb(246, 192, 80)" }} class="fa-solid fa-star"></i>
+            }
+          </div> : null}
+          <div class="dropdown">
+            <button style={{ fontWeight: "bold" }} class="button-8 dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+              Share
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" style={{ width: "240px" }}>
+              <div className='p-2 d-flex gap-4'>
+                <div>
+                  <div className='mb-2 text-primary' >
+                    <FacebookShareButton url={shareUrl}><i class="fa-brands fa-facebook me-1"></i> Facebook</FacebookShareButton>
+                  </div>
+                  <div className='mb-2 text-primary'><EmailShareButton url={shareUrl}><i class="fa-solid fa-envelope me-1"></i> Email</EmailShareButton></div>
+                  <div className='mb-2 text-primary'><LinkedinShareButton url={shareUrl}><i class="fa-brands fa-linkedin me-1"></i> Linkedin</LinkedinShareButton></div>
 
+                </div>
+                <div>
+                  <div className='mb-2 text-primary'><FacebookMessengerShareButton url={shareUrl}><i class="fa-brands fa-facebook-messenger me-1"></i> Messenger</FacebookMessengerShareButton></div>
+                  <div className='mb-2 text-primary'><TwitterShareButton url={shareUrl}><i class="fa-brands fa-square-twitter me-1"></i> Twitter</TwitterShareButton></div>
+                  <div className='mb-2 text-primary'><TelegramShareButton url={shareUrl}><i class="fa-brands fa-telegram me-1"></i>Telegram</TelegramShareButton></div>
+                </div>
               </div>
-              <div>
-                <div className='mb-2 text-primary'><FacebookMessengerShareButton url={shareUrl}><i class="fa-brands fa-facebook-messenger me-1"></i> Messenger</FacebookMessengerShareButton></div>
-                <div className='mb-2 text-primary'><TwitterShareButton url={shareUrl}><i class="fa-brands fa-square-twitter me-1"></i> Twitter</TwitterShareButton></div>
-                <div className='mb-2 text-primary'><TelegramShareButton url={shareUrl}><i class="fa-brands fa-telegram me-1"></i>Telegram</TelegramShareButton></div>
-              </div>
-            </div>
-          </ul>
+            </ul>
+          </div>
         </div>
       </div>
+
       <form className='mt-3'>
         <div class="mb-3">
           <input type="text" class="form-control" value={noteDetail?.note?.title} onChange={(e) => dispatch(setTitleAction(e.target.value))} placeholder='Note Title' />
           {errTitle ? <p style={{ color: "red" }}>{errTitle}</p> : null}
         </div>
-        <div class="d-flex gap-2 align-items-start mb-4">
+
+        <div class="d-flex gap-2 align-items-end ">
           <div data-mdb-input-init class="form-outline">
+            <label style={{ fontSize: "14px" }} className="form-label">New Task</label>
             <input type="text" ref={newTaskRef} class="form-control" placeholder='Add new task here' />
-            {errNewTask ? <p style={{ color: "red", margin: "0" }}>{errNewTask}</p> : null}
+
           </div>
           <div >
+            <label style={{ fontSize: "14px" }} className="form-label">Status</label>
             <select class="form-select" ref={taskStatusRef} >
-              <option value={false} >False</option>
-              <option value={true} >True</option>
+              <option value={false} >In Progress</option>
+              <option value={true} >Done</option>
             </select>
           </div>
-          <div >
-            <button type='button' className='btn btn-primary' onClick={() => handleAddNewTask()}>Add</button>
+          <div>
+            <label style={{ fontSize: "14px" }} className="form-label">Deadline</label>
+            <input type="date" class="form-control" />
+          </div>
+          <div>
+            <button type='button' className='button-4' onClick={() => handleAddNewTask()}>Add Task</button>
           </div>
         </div>
-        <table class="table mt-3 mb-3">
+        <div className='d-flex gap-2'>
+          {errNewTask ? <p className='mb-4' style={{ color: "red", margin: "0" }}>{errNewTask}</p> : <p className='mb-4'></p>}
+        </div>
+
+        <table class="table table-striped mt-3 mb-3">
           <thead>
             <tr>
               <th scope="col">TaskName</th>
               <th scope="col">Status</th>
+              <th scope="col">Deadline</th>
               <th scope="col"></th>
             </tr>
           </thead>
           <tbody>
-            {TaskList?.map((item) => (
-              <TaskItem item={item} key={item.id} edit={true} />
-            ))}
+            {
+              TaskList?.map((item, index) => (
+                <TaskItem item={item} key={item?.id} edit={true} />
+              ))
+            }
           </tbody>
         </table>
         {
@@ -148,14 +177,16 @@ export default function TaskListUpdate() {
           noteDetail?.note?.user_id === userInformation?.user?.id ? (userInformation?.user?.role === "GUEST" ? <select class="form-select mt-3" value={noteDetail?.note?.status} onChange={(e) => dispatch(setStatusAction(e.target.value))} aria-label="Default select example" >
             <option value="public">Public</option>
             <option value="private">Private</option>
-          </select> : <button type="button" class="btn btn-default mt-3" data-bs-toggle="modal" data-bs-target="#modelsetstatus">
+          </select> : <button type="button" class="button-4 mt-3" data-bs-toggle="modal" data-bs-target="#modelsetstatus">
             Note Read Permission
           </button>) : null
         }
         <br />
-        <button type="button" onClick={() => handleSubmit()} class="btn btn-primary mt-3">Submit</button>
+        <button type="button" onClick={() => handleSubmit()} class="button-8 mt-3">Update</button>
       </form>
+
       <Comment id={param.id} note_user_id={noteDetail?.note?.user_id} />
+
       <div class="modal fade" id="modelsetstatus" tabindex="-1" aria-labelledby="modelsetstatus" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">

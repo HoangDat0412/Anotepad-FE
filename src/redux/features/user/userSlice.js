@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { DOMAIN, TOKEN, USER_LOGIN } from '../../../utils/config';
+import { TOKEN } from '../../../utils/config';
 import { service } from '../../../services/baseService';
-import axios from 'axios';
+
 
 // const thongTinNguoiDung = localStorage.getItem("THONG_TIN_NGUOI_DUNG")
 // ? JSON.parse(localStorage.getItem("THONG_TIN_NGUOI_DUNG"))
@@ -11,9 +11,10 @@ const initialState = {
   userLogin: null,
   userInformation: {
     user:{
-      role:"GUEST"
+      role:"GUEST",
     }
   },
+  UserInformationStatus:false,
   userList:[],
   userGuestLength:0,
   userLength:0,
@@ -26,9 +27,13 @@ const initialState = {
   userUpdate:{},
   userUpdateResult:true,
   dashboardInfo:{},
-  userInfo:{},
+  userInfo:{
+    user:{
+      email:""
+    }
+  },
   listLoginHistory:[],
- 
+  resetPassStatus:false
 }
 
 export const userSlice = createSlice({
@@ -42,6 +47,7 @@ export const userSlice = createSlice({
     },
     setInfoAction: (state, action) => {
       state.userInformation = action.payload;
+      state.UserInformationStatus = true
     },
     setResponseRegister:(state,action)=>{
       state.responseRegister = action.payload
@@ -53,6 +59,9 @@ export const userSlice = createSlice({
     },
     setEmailAction:(state,action)=>{
       state.userInformation.user.email = action.payload
+    },
+    setUserNameAction:(state,action)=>{
+      state.userInformation.user.user_name = action.payload
     },
     setListUser:(state,action)=>{
       state.userList = action.payload
@@ -75,35 +84,37 @@ export const userSlice = createSlice({
     setloginHistory:(state,action)=>{
       state.listLoginHistory = action.payload
       console.log(state.listLoginHistory);
+    },
+    setResetPassStatus: (state,action)=>{
+      state.resetPassStatus = action.payload
     }
   },
 })
 
 // Action creators are generated for each case reducer function
-export const {setloginHistory,dangNhapAction,setInfoAction,setResponseRegister,logoutAction,setEmailAction,setListUser,setDashBoardInfo,adminSetUserInfo,setEmail,setPassword,setRole } = userSlice.actions
+export const {setResetPassStatus,setUserNameAction,setloginHistory,dangNhapAction,setInfoAction,setResponseRegister,logoutAction,setEmailAction,setListUser,setDashBoardInfo,adminSetUserInfo,setEmail,setPassword,setRole } = userSlice.actions
 
 export default userSlice.reducer
-
 // action api 
 export const registerCookieActionApi = () => {
-  
   return async (dispatch) => {
     try {
       const result = await service.get(`/user/register/cookie`)
       if(result.status === 201){
         dispatch(dangNhapAction(result.data));
+        dispatch(getUserInfomation())
       }
     } catch (error) {
       console.log(error);
     }
   };
 };
-
 export const registerApi = (data)=>{
   return async (dispatch) => {
     try {
       const result = await service.post(`/user/register`,data)
       if(result.status === 201){
+        alert("Create account success. Please verify your email !")
         dispatch(setResponseRegister(true));
       }
     } catch (error) {
@@ -111,7 +122,6 @@ export const registerApi = (data)=>{
     }
   };
 }
-
 export const getUserInfomation = ()=>{
   return async (dispatch) =>{
     try {
@@ -124,7 +134,6 @@ export const getUserInfomation = ()=>{
     }
   }
 }
-
 export const loginApi = (data) =>{
   return async (dispatch) => {
     try {
@@ -138,20 +147,19 @@ export const loginApi = (data) =>{
     }
   };
 }
-
 export const updateUserApi = (data) =>{
   return async (dispatch) => {
     try {
       const result = await service.put(`/user/update`,data)
       if(result.status === 200){
         alert("update success")
+        dispatch(getUserInfomation())
       }
     } catch (error) {
       alert("update false")
     }
   };
 }
-
 export const getAllUser = () => {
   
   return async (dispatch) => {
@@ -165,7 +173,6 @@ export const getAllUser = () => {
     }
   };
 };
-
 export const getDashboardInfo = () => {
   
   return async (dispatch) => {
@@ -179,7 +186,6 @@ export const getDashboardInfo = () => {
     }
   };
 };
-
 export const deleteUser = (id) =>{
   return async (dispatch) => {
     try {
@@ -206,7 +212,6 @@ export const getUserById = (id) =>{
     }
   };
 }
-
 export const updateUserById = (id,data)=>{
   return async (dispatch) => {
     try {
@@ -219,7 +224,6 @@ export const updateUserById = (id,data)=>{
     }
   };
 }
-
 export const loginHistoryApi = ()=>{
   return async (dispatch) =>{
     try {
@@ -232,4 +236,59 @@ export const loginHistoryApi = ()=>{
     }
   }
 }
+export const logoutActionApi = ()=>{
+  return async (dispatch) => {
+    dispatch(logoutAction())
+    dispatch(registerCookieActionApi())
+  }
+}
 
+export const updateAccountPassword = (data) =>{
+  return async (dispatch) => {
+    try {
+      const result = await service.post(`/user/updatepassword`,data)
+      if(result.status === 200){
+        alert("update password success")
+      }if(result.status === 401){
+        alert("password is not correct")
+      }
+    } catch (error) {
+      alert("update false")
+    }
+  };
+}
+
+export const forgotPassword = (data) => {
+  return async (dispatch) =>{
+    try {
+      const result = await service.post(`/user/forgotpassword`,data)
+      if(result.status === 200){
+        alert("The link to reset your password already send to your email !")
+      }
+      if(result.status === 404){
+        alert("Not found your email !")
+      }
+    } catch (error) {
+      alert("Not found your email !")
+    }
+  }
+}
+export const resetPassword = (email,token,data)=>{
+  return async (dispatch)=>{
+    try {
+      const result = await service.post(`/user/resetpassword/${email}/${token}`,data)
+      if(result.status === 200){
+        alert("Your password change success !")
+        dispatch(setResetPassStatus(true))
+      }
+      if(result.status === 401){
+        alert("The link reset password has expired")
+      }
+      if(result.status === 404){
+        alert("Not found the email")
+      }
+    } catch (error) {
+      alert("The link reset password has expired")
+    }
+  }
+}

@@ -1,104 +1,217 @@
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { NavLink, Outlet } from 'react-router-dom'
 import "./hometemplate.scss"
 import { useSelector, useDispatch } from 'react-redux'
 import { setShowSidebar } from '../../redux/features/loading/loadingSlice'
-import anotepadlogo from "../../assests/img/anotepadicon.png"
-import Profile from '../../pages/Profile/Profile'
-import { getUserInfomation, logoutAction, registerCookieActionApi } from '../../redux/features/user/userSlice'
-import LoginHistory from '../../components/LoginHistory/LoginHistory'
+import { getUserInfomation, logoutActionApi, registerCookieActionApi } from '../../redux/features/user/userSlice'
+
+import logo from '../../assests/img/logo.png'
+import Search from '../../pages/Search/Search'
+
 
 export default function HomeTemplate() {
 
   const dispatch = useDispatch()
   const { showSidebar } = useSelector(state => state.loadingSlice)
   const { userInformation } = useSelector(state => state.userSlice)
+  const fetchData = useCallback(() => {
+    dispatch(registerCookieActionApi());
+    dispatch(getUserInfomation());
+  }, [dispatch]);
   useEffect(() => {
-    dispatch(registerCookieActionApi())
-    dispatch(getUserInfomation())
-  }, [])
+    fetchData()
+  }, [fetchData])
   return (
     <div className='container-fluid hometemplate'>
-      <div className="row flex-nowrap">
-        <div className="col-auto px-0 " style={{position:"relative"}}>
-          <div className="flex-column align-items-center px-3 pt-2 min-vh-100 sidebar d-none d-sm-flex">
-            <div className="pb-1 mb-md-0 text-decoration-none" >
-              {showSidebar ? <span > <i style={{ fontSize: "20px",position:"absolute",right:15,top:15 }} onClick={() => { dispatch(setShowSidebar(false)) }} class="fa-solid fa-xmark"></i></span> : <span> <i style={{ fontSize: "20px" }} onClick={() => { dispatch(setShowSidebar(true)) }} class="fa-solid fa-bars"></i></span>}
+      <div className="row flex-nowrap" style={{ height: "100vh" }}>
+        {
+          showSidebar ? <div className="d-none d-md-block col-auto sidebar">
+            <div className='sidebar-inner'>
+              <div className='sidebar__header'>
+                <div class="sidebar__logo mt-1">
+                  <NavLink to='/' className="fs-5">
+                    <img className='img-fluid' width={50} src={logo} alt="" />
+                    <span style={{ fontWeight: 'lighter', fontSize: '18px' }}>Smart Notes</span>
+                  </NavLink>
+                </div>
+                <div >
+                  <span onClick={() => { dispatch(setShowSidebar(false)) }} class="sidebar__foot-link"><i class="fa-solid fa-angles-left sidebar__foot-link-icon"></i></span>
+                </div>
+              </div>
+              <div class="sidebar__nav">
+                <ul class="tree">
+                  <li class="tree__item">
+                    <NavLink to='/' className="tree__action sidebar__action">
+                      <span aria-current="page" className="tree__link nuxt-link-exact-active nuxt-link-active">
+                        <i className="tree__icon fa-solid fa-house"></i>
+
+                        <span className="tree__link-text"><span className="sidebar__item-name">Dashboard</span></span>
+                      </span>
+                    </NavLink>
+                  </li>
+                  <li class="tree__item">
+                    <NavLink to='/richnote' className="tree__action sidebar__action">
+                      <span aria-current="page" className="tree__link nuxt-link-exact-active nuxt-link-active">
+                        <i className="tree__icon fa-solid fa-pen"></i>
+
+                        <span className="tree__link-text"><span className="sidebar__item-name">Create Note</span></span>
+                      </span>
+                    </NavLink>
+                  </li>
+                  <li class="tree__item">
+                    <NavLink to='/tasklists' className="tree__action sidebar__action">
+                      <span aria-current="page" className="tree__link nuxt-link-exact-active nuxt-link-active">
+                        <i className="tree__icon fa-solid fa-list-check"></i>
+                        <span className="tree__link-text"><span className="sidebar__item-name">New TaskList</span></span>
+                      </span>
+                    </NavLink>
+                  </li>
+                  <li class="tree__item">
+                    <div role='button' data-bs-toggle="modal" data-bs-target="#modelSearch" className="tree__action sidebar__action">
+                      <span aria-current="page" className="tree__link nuxt-link-exact-active nuxt-link-active">
+                        <i className="tree__icon fa-solid fa-search"></i>
+                        <span className="tree__link-text"><span className="sidebar__item-name">Search</span></span>
+                      </span>
+                    </div>
+                  </li>
+                  <li class="tree__item">
+                    <NavLink to='/folder' className="tree__action sidebar__action">
+                      <span aria-current="page" className="tree__link nuxt-link-exact-active nuxt-link-active">
+                        <i className="tree__icon fa-solid fa-folder"></i>
+                        <span className="tree__link-text"><span className="sidebar__item-name">Folder</span></span>
+                      </span>
+                    </NavLink>
+                  </li>
+                  <li class="tree__item">
+                    <NavLink to='/features' className="tree__action sidebar__action">
+                      <span aria-current="page" className="tree__link nuxt-link-exact-active nuxt-link-active">
+                        <i className="tree__icon fa-solid fa-fire"></i>
+                        <span className="tree__link-text"><span className="sidebar__item-name">Features</span></span>
+                      </span>
+                    </NavLink>
+                  </li>
+                </ul>
+              </div>
+              {userInformation?.user?.role === "GUEST" ? <div className="text-center mt-auto mb-2">
+                <NavLink to='/login' className='button-4' style={{ padding: "7px 55px" }}><i class="fa-solid fa-right-to-bracket"></i> Login</NavLink>
+              </div> : <div className="dropdown" style={{ marginTop: 'auto' }}>
+                <span className="sidebar__user w-100 dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                  <div className="avatar">
+                    <img src="https://i.pinimg.com/564x/c6/e5/65/c6e56503cfdd87da299f72dc416023d4.jpg" alt='avatar' />
+                  </div>
+                  <div className="sidebar__user-info">
+                    <div className="sidebar__user-info-top">
+                      <div className="sidebar__user-name">{userInformation?.user?.user_name || 'User Name'}</div>
+                      <i className="sidebar__user-icon fa-solid fa-angle-down"></i>
+                    </div>
+                    <div className="sidebar__user-email">{userInformation?.user?.email}</div>
+                  </div>
+                </span>
+
+                <ul className="dropdown-menu " aria-labelledby="dropdownMenuButton1">
+                  <li><NavLink to='/account' className="setting_btn"><i class="fa-solid fa-gear"></i> Setting</NavLink></li>
+                  <li><button className="setting_btn" onClick={() => dispatch(logoutActionApi())}><i class="fa-solid fa-arrow-right-from-bracket"></i> Sign out</button></li>
+                </ul>
+              </div>}
+
+
             </div>
-            <div className="mt-5 pb-3 mb-md-0 text-decoration-none">
-              <NavLink to='/' className="fs-5 d-none d-sm-inline">
-                <img className='img-fluid' width={30} src={anotepadlogo} alt="" />
-                {showSidebar ? <span className="ms-2 d-none d-sm-inline">Anotepad</span> : ""}
-              </NavLink>
+          </div> : <div className="d-none d-md-block col-auto sidebar" >
+            <div className='sidebar-inner align-items-center' style={{ width: "58px" }}>
+              <div class="mt-3">
+                <NavLink to='/' title="Smartnote">
+                  <div class="logo mb-1">
+                    <img src={logo} height="45" alt="Smartnote" />
+                  </div>
+                </NavLink>
+              </div>
+              <div className='mb-1' >
+                <span class="sidebar__foot-link" onClick={() => { dispatch(setShowSidebar(true)) }}><i class="fa-solid fa-angles-right sidebar__foot-link-icon" style={{ fontSize: "14px" }}></i></span>
+              </div>
+              <div class="sidebar__nav">
+                <ul class="tree">
+                  <li class="tree__item">
+                    <NavLink to='/' className="tree__action sidebar__action">
+                      <span aria-current="page" className="tree__link nuxt-link-exact-active nuxt-link-active">
+                        <i className="tree__icon fa-solid fa-house"></i>
+                      </span>
+                    </NavLink>
+                  </li>
+                  <li class="tree__item">
+                    <NavLink to='/richnote' className="tree__action sidebar__action">
+                      <span aria-current="page" className="tree__link nuxt-link-exact-active nuxt-link-active">
+                        <i className="tree__icon fa-solid fa-pen"></i>
+                      </span>
+                    </NavLink>
+                  </li>
+                  <li class="tree__item">
+                    <NavLink to='/tasklists' className="tree__action sidebar__action">
+                      <span aria-current="page" className="tree__link nuxt-link-exact-active nuxt-link-active">
+                        <i className="tree__icon fa-solid fa-list-check"></i>
+                      </span>
+                    </NavLink>
+                  </li>
+                  <li class="tree__item">
+                    <div role='button' data-bs-toggle="modal" data-bs-target="#modelSearch" className="tree__action sidebar__action">
+                      <span aria-current="page" className="tree__link nuxt-link-exact-active nuxt-link-active">
+                        <i className="tree__icon fa-solid fa-search"></i>
+                      </span>
+                    </div>
+                  </li>
+                  <li class="tree__item">
+                    <NavLink to='/folder' className="tree__action sidebar__action">
+                      <span aria-current="page" className="tree__link nuxt-link-exact-active nuxt-link-active">
+                        <i className="tree__icon fa-solid fa-folder"></i>
+                      </span>
+                    </NavLink>
+                  </li>
+                  <li class="tree__item">
+                    <NavLink to='/features' className="tree__action sidebar__action">
+                      <span aria-current="page" className="tree__link nuxt-link-exact-active nuxt-link-active">
+                        <i className="tree__icon fa-solid fa-fire"></i>
+                      </span>
+                    </NavLink>
+                  </li>
+                </ul>
+              </div>
+              {
+                userInformation?.user?.role === "GUEST" ? <div className="text-center mt-auto mb-2">
+                  <NavLink to='/login' style={{ padding: "5px 7px" }} className='button-4' ><i class="fa-solid fa-right-to-bracket"></i></NavLink>
+                </div> : <div className="dropdown" style={{ marginTop: 'auto' }}>
+                  <span className="sidebar__user w-100 dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                    <div className="avatar">
+                      <img src="https://i.pinimg.com/564x/c6/e5/65/c6e56503cfdd87da299f72dc416023d4.jpg" alt='avatar' />
+                    </div>
+                  </span>
+                  <ul className="dropdown-menu " aria-labelledby="dropdownMenuButton1">
+                    <li><NavLink to='/account' className="setting_btn" ><i class="fa-solid fa-gear"></i> Setting</NavLink></li>
+                    <li><button className="setting_btn" onClick={() => dispatch(logoutActionApi())}><i class="fa-solid fa-arrow-right-from-bracket"></i> Sign out</button></li>
+                  </ul>
+                </div>
+              }
+
+
             </div>
-            <ul className="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
-              <li className="nav-item w-100">
-                <NavLink to='/' className="nav-link align-middle px-0 ">
-                  <i class="fa fa-home"></i> {showSidebar ? <span className="ms-3 d-none d-sm-inline">Home</span> : ""}
-                </NavLink>
-              </li>
-              <li className="nav-item w-100">
-                <NavLink to='/tasklists' className="nav-link align-middle px-0">
-                <i class="fa-solid fa-list-check"></i> {showSidebar ? <span className="ms-3 d-none d-sm-inline">Task List</span> : ""}
-                </NavLink>
-              </li>
-              <li className="nav-item w-100">
-                <NavLink to='/richnote' className="nav-link align-middle px-0">
-                <i class="fa-solid fa-pen"></i> {showSidebar ? <span className="ms-3 d-none d-sm-inline">Rich Note</span> : ""}
-                </NavLink>
-              </li>
-              <li className="nav-item w-100">
-                <NavLink to='/folder' className="nav-link align-center px-0">
-                  <i class="fa-solid fa-folder"></i>
-                  {showSidebar ? <span className="ms-3 ">Folder</span> : ""}
-                </NavLink>
-              </li>
-              <li className="nav-item w-100">
-                <NavLink to='/features' className="nav-link align-middle px-0">
-                  <i class="fa-solid fa-fire"></i>
-                  {showSidebar ? <span className="ms-3">Features</span> : ""}
-                </NavLink>
-              </li>
-            </ul>
-            <hr />
-            { userInformation?.user?.role === "GUEST" ?  <div>
-              <NavLink to='/login' className='btn btn-default'>Login</NavLink>
-            </div> : <div class="dropdown pb-4 mt-auto">
-              <a className="d-flex align-items-center text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-              <img src="https://as2.ftcdn.net/v2/jpg/03/49/49/79/1000_F_349497933_Ly4im8BDmHLaLzgyKg2f2yZOvJjBtlw5.jpg" alt="hugenerd" width="30" height="30" class="rounded-circle"/>
-              {showSidebar ? (userInformation?.user?.email.length ? <span class="ms-1">{userInformation?.user?.email.split('@')[0]}</span> : "") : ""}
-                
-              </a>
-              <ul className="dropdown-menu dropdown-menu-dark text-small shadow">
-              <li><button style={{ color: "white" }} className="setting_btn" data-bs-toggle="modal" data-bs-target="#modelhistory">Login History</button></li>
-                <li><button style={{ color: "white" }} className="setting_btn" data-bs-toggle="modal" data-bs-target="#exampleModal">Profile</button></li>
-                <li>
-                  <hr class="dropdown-divider" />
-                </li>
-                <li><button class="dropdown-item btn btn-default" onClick={() => dispatch(logoutAction())}>Sign out</button></li>
-              </ul>
-            </div>}
           </div>
-        </div>
+        }
         <div className="col py-3 content">
           <nav
-            class="navbar navbar-expand-md d-sm-none"
+            class="navbar navbar-expand-md d-md-none"
           >
             <div class="container-fluid">
               <NavLink to='/' className="fs-5">
-                <img className='img-fluid' width={40} src={anotepadlogo} alt="" />
-                <span className="ms-2">Anotepad</span>
+                <img className='img-fluid' width={50} src={logo} alt="" />
+                <span className="" style={{ fontWeight: 'lighter' }}>Smart Notes</span>
               </NavLink>
-              {/* <a class="navbar-brand" href="#">Anotepad</a> */}
 
-              <a
+              <button
+                className='btn btn-default'
                 data-bs-toggle="offcanvas"
                 data-bs-target="#offcanvasRight"
-                role="button"
                 aria-controls="offcanvasRight"
               >
                 <i style={{ fontSize: "20px" }} class="fa-solid fa-bars"></i>
-              </a>
+              </button>
             </div>
           </nav>
           <Outlet />
@@ -107,13 +220,14 @@ export default function HomeTemplate() {
 
 
       <div
-        className="offcanvas offcanvas-end d-sm-none"
+        className="offcanvas offcanvas-end d-md-none"
         tabindex="-1"
         id="offcanvasRight"
         aria-labelledby="offcanvasRightLabel"
         style={{
-          width: "200px",
-          height: "100%"
+          width: "270px",
+          height: "100%",
+          background: "#fafafa"
         }}
       >
         <div class="offcanvas-header mb-0">
@@ -122,72 +236,99 @@ export default function HomeTemplate() {
           </button>
         </div>
         <div class="offcanvas-body p-0 ">
-          <div className="d-flex flex-column align-items-center px-3 pt-2 sidebar" style={{backgroundColor:"#fff"}}>
-            <div className="pb-3 mb-md-0 text-decoration-none">
-              <NavLink to='/' className="fs-5">
-                <img className='img-fluid' width={30} src={anotepadlogo} alt="" />
-                <span className="ms-2">Anotepad</span>
-              </NavLink>
+          <div className="sidebar" style={{ border: "none" }}>
+            <div className='sidebar-inner'>
+              <div className='sidebar__header'>
+                <div class="sidebar__logo">
+                  <NavLink to='/' className="fs-5">
+                    <img className='img-fluid' width={50} src={logo} alt="" />
+                    <span className="" style={{ fontWeight: 'lighter' }}>Smart Notes</span>
+                  </NavLink>
+                </div>
+
+              </div>
+              <div class="sidebar__nav">
+                <ul class="tree">
+                  <li class="tree__item">
+                    <NavLink to='/' className="tree__action sidebar__action">
+                      <span aria-current="page" className="tree__link nuxt-link-exact-active nuxt-link-active">
+                        <i className="tree__icon fa-solid fa-house"></i>
+
+                        <span className="tree__link-text"><span className="sidebar__item-name">Dashboard</span></span>
+                      </span>
+                    </NavLink>
+                  </li>
+                  <li class="tree__item">
+                    <NavLink to='/richnote' className="tree__action sidebar__action">
+                      <span aria-current="page" className="tree__link nuxt-link-exact-active nuxt-link-active">
+                        <i className="tree__icon fa-solid fa-pen"></i>
+
+                        <span className="tree__link-text"><span className="sidebar__item-name">Create Note</span></span>
+                      </span>
+                    </NavLink>
+                  </li>
+                  <li class="tree__item">
+                    <NavLink to='/tasklists' className="tree__action sidebar__action">
+                      <span aria-current="page" className="tree__link nuxt-link-exact-active nuxt-link-active">
+                        <i className="tree__icon fa-solid fa-list-check"></i>
+                        <span className="tree__link-text"><span className="sidebar__item-name">New TaskList</span></span>
+                      </span>
+                    </NavLink>
+                  </li>
+                  <li class="tree__item">
+                    <div role='button' data-bs-toggle="modal" data-bs-target="#modelSearch" className="tree__action sidebar__action">
+                      <span aria-current="page" className="tree__link nuxt-link-exact-active nuxt-link-active">
+                        <i className="tree__icon fa-solid fa-search"></i>
+                        <span className="tree__link-text"><span className="sidebar__item-name">Search</span></span>
+                      </span>
+                    </div>
+                  </li>
+                  <li class="tree__item">
+                    <NavLink to='/folder' className="tree__action sidebar__action">
+                      <span aria-current="page" className="tree__link nuxt-link-exact-active nuxt-link-active">
+                        <i className="tree__icon fa-solid fa-folder"></i>
+                        <span className="tree__link-text"><span className="sidebar__item-name">Folder</span></span>
+                      </span>
+                    </NavLink>
+                  </li>
+                  <li class="tree__item">
+                    <NavLink to='/features' className="tree__action sidebar__action">
+                      <span aria-current="page" className="tree__link nuxt-link-exact-active nuxt-link-active">
+                        <i className="tree__icon fa-solid fa-fire"></i>
+                        <span className="tree__link-text"><span className="sidebar__item-name">Features</span></span>
+                      </span>
+                    </NavLink>
+                  </li>
+
+                </ul>
+              </div>
+              {userInformation?.user?.role === "GUEST" ? <div className="text-center mt-auto mb-2">
+                <NavLink to='/login' className='button-4' style={{ padding: "7px 55px" }}><i class="fa-solid fa-right-to-bracket"></i> Login</NavLink>
+              </div> : <div className="dropdown" style={{ marginTop: 'auto' }}>
+                <span className="sidebar__user w-100 dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                  <div className="avatar">
+                    <img src="https://i.pinimg.com/564x/c6/e5/65/c6e56503cfdd87da299f72dc416023d4.jpg" alt='avatar' />
+                  </div>
+                  <div className="sidebar__user-info">
+                    <div className="sidebar__user-info-top">
+                      <div className="sidebar__user-name">Hoang Dat</div>
+                      <i className="sidebar__user-icon fa-solid fa-angle-down"></i>
+                    </div>
+                    <div className="sidebar__user-email">hoang2811dat@gmail.com</div>
+                  </div>
+                </span>
+
+                <ul className="dropdown-menu " aria-labelledby="dropdownMenuButton1">
+                  <li><NavLink to='/account' className="setting_btn"><i class="fa-solid fa-gear"></i> Setting</NavLink></li>
+                  <li><button className="setting_btn" onClick={() => dispatch(logoutActionApi())}><i class="fa-solid fa-arrow-right-from-bracket"></i> Sign out</button></li>
+                </ul>
+              </div>}
             </div>
-
-            <ul className="nav nav-pills flex-column mb-sm-auto mb-0 align-items-start" id="menu">
-              <li className="nav-item w-100">
-                <NavLink to='/' className="nav-link align-middle px-0">
-                  <i class="fa fa-home"></i>  <span className="ms-3 ">Home</span>
-                </NavLink>
-              </li>
-              <li className="nav-item w-100">
-                <NavLink to='/tasklists' className="nav-link align-middle px-0">
-                <i class="fa-solid fa-list-check"></i> <span className="ms-3 ">Task List</span> 
-                </NavLink>
-              </li>
-              <li className="nav-item w-100">
-                <NavLink to='/richnote' className="nav-link align-middle px-0">
-                <i class="fa-solid fa-pen"></i>  <span className="ms-3 ">Rich Note</span> 
-                </NavLink>
-              </li>
-              <li className="nav-item w-100">
-                <NavLink to='/folder' className="nav-link align-center px-0">
-                  <i class="fa-solid fa-folder"></i>
-                  <span className="ms-3 ">Folder</span>
-
-                </NavLink>
-              </li>
-              <li className="nav-item w-100">
-                <NavLink to='/features' className="nav-link align-middle px-0">
-                  <i class="fa-solid fa-fire"></i>
-                  <span className="ms-3">Features</span>
-
-                </NavLink>
-              </li>
-            </ul>
-            <hr />
-
-            { userInformation?.user?.role === "GUEST" ?  <div>
-              <button className='btn btn-default'>Login</button>
-            </div> :             <div class="dropdown pb-4 mt-auto">
-              <a className="d-flex align-items-center text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-
-                <span class="mx-1">{userInformation?.user?.email.split('@')[0]}</span>
-
-              </a>
-              <ul className="dropdown-menu dropdown-menu-dark text-small shadow">
-              <li><button style={{ color: "white" }} className="setting_btn dropdown-item" data-bs-toggle="modal" data-bs-target="#modelhistory">Login History</button></li>
-                <li><button  style={{ color: "white" }} className="setting_btn dropdown-item" data-bs-toggle="modal" data-bs-target="#exampleModal">Profile</button></li>
-                <li>
-                  <hr class="dropdown-divider" />
-                </li>
-                <li><a class="dropdown-item">Sign out</a></li>
-              </ul>
-            </div>}
-
-
           </div>
         </div>
       </div>
 
-      <Profile information={userInformation}/>
-      <LoginHistory/>
+      <Search />
     </div>
   )
 }

@@ -1,0 +1,16 @@
+.search_model {
+    .search_content {
+        height: 65vh;
+        overflow-y: scroll;
+    }
+    .group_note {
+        p {
+            color: rgba(55, 53, 47, 0.65);
+            fill: rgba(55, 53, 47, 0.45);
+            font-size: 13px;
+            font-weight: 500;
+            line-height: 120%;
+            user-select: none;
+        }
+    }
+}

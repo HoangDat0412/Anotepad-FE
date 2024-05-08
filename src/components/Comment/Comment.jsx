@@ -1,9 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { checkNull } from '../../validation/validation';
 import { useDispatch, useSelector } from 'react-redux';
 import { createComment, deleteComment, getListComment } from '../../redux/features/comment/commentSlice';
 import moment from 'moment';
-import { deleteNote } from '../../redux/features/note/noteSlice';
 
 export default function Comment(props) {
     const id = props.id
@@ -14,9 +13,13 @@ export default function Comment(props) {
     const comment = useRef(null)
     const [errComment,setErrComment] = useState(false)
     const dispatch = useDispatch()
-    useEffect(()=>{
-        dispatch(getListComment(id))
-    },[])
+    const fetchListComment = useCallback(() => {
+      dispatch(getListComment(id));
+    }, [dispatch, id]);
+    
+    useEffect(() => {
+      fetchListComment();
+    }, [fetchListComment]);
     const {listComment} = useSelector(state => state.commentSlice)
     const { userInformation } = useSelector(state => state.userSlice)
     const handleComment = ()=>{
@@ -55,7 +58,7 @@ export default function Comment(props) {
                             <div class=" mb-4" key={comment?.id}>
                             <div class="mb-0 d-flex justify-content-start gap-3 align-items-center">
                               <h6 style={{margin:"0",color:"#4285f4"}}>{comment?.user_name}</h6>
-                              <span >{moment(comment?.createdAt).format('dd/mm/yyyy')}</span>
+                              <span style={{fontSize:"14px"}} >{moment(comment?.createdAt).format('DD-MM-YYYY')}</span>
                               { userInformation?.user?.id === note_user_id ?  <span style={{margin:"0",color:"#4285f4"}}><i  onClick={()=> dispatch(deleteComment(id,comment?.id))} className="fa fa-trash-alt"></i></span> : ""}
                             </div>
                             <p class="mb-0">{comment?.comment}</p>

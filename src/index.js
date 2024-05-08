@@ -10,19 +10,22 @@ import {
 } from "react-router-dom";
 import AdminTemplate from './templates/AdminTemplate/AdminTemplate';
 import HomeTemplate from './templates/HomeTemplate/HomeTemplate';
-import LoginTemplate from './templates/LoginTemplate/LoginTemplate';
 import Home from './pages/Home/Home';
 import RichNote from './pages/RichNote/RichNote';
 import TaskLists from './pages/TaskLists/TaskLists';
 import Folder from './pages/Folder/Folder';
 import Features from './pages/Features/Features';
-import Profile from './pages/Profile/Profile';
 import Login from './pages/Login/Login';
 import Register from './pages/Register/Register';
 import Dashboard from './pages/Dashboard/Dashboard';
 import ManageUser from './pages/ManagerUser/ManageUser';
 import UpdateRichNote from './pages/UpdateRichNote/UpdateRichNote';
 import UpdateTaskList from './pages/UpdateTaskList/UpdateTaskList';
+import SettingTemplate from './templates/SettingTemplate/SettingTemplate';
+import Profile from './pages/Profile/Profile';
+import LoginHistory from './pages/LoginHistory/LoginHistory';
+import ForgotPassword from './pages/ForgotPassword/ForgotPassword';
+import ResetPassword from './pages/ResetPassword/ResetPassword';
 const router = createBrowserRouter([
   {
     path: "/",
@@ -79,6 +82,28 @@ const router = createBrowserRouter([
         element: <ManageUser/>
       },
     ]
+  },
+  {
+    path: "/",
+    element: <SettingTemplate/>,
+    children:[
+      {
+        path: "/account",
+        element: <Profile/>
+      },
+      {
+        path: "/loginhistory",
+        element: <LoginHistory/>
+      }
+    ]
+  },
+  {
+    path: "/forgotpassword",
+    element: <ForgotPassword/>,
+  },
+  {
+    path: "/resetpassword/:email/:token",
+    element: <ResetPassword/> ,
   },
 ]);
 const root = ReactDOM.createRoot(document.getElementById('root'));

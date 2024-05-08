@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { TOKEN, USER_LOGIN } from '../../../utils/config';
 
 const initialState = {
     showSidebar:true

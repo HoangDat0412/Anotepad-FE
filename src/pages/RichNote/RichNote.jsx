@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import "./richnote.scss"
 import { Editor } from '@tinymce/tinymce-react';
 import { useRef, useState } from 'react';
@@ -7,12 +7,17 @@ import { checkNull } from '../../validation/validation';
 import { createNote, setCreateResultFalse } from '../../redux/features/note/noteSlice';
 import { getListFolder } from '../../redux/features/folder/folderSlice';
 import { useNavigate } from 'react-router-dom';
+import { APIKEY_TIMYCLOUND } from '../../utils/config';
 export default function RichNote() {
 
   const dispatch = useDispatch()
+  const fetchFolderList = useCallback(() => {
+    dispatch(getListFolder());
+  }, [dispatch]);
+  
   useEffect(() => {
-    dispatch(getListFolder())
-  }, [])
+    fetchFolderList();
+  }, [fetchFolderList]);
   const { listFolder } = useSelector(state => state.folderSlice)
   const { userInformation } = useSelector(state => state.userSlice)
   const { createResult } = useSelector(state => state.noteSlice)
@@ -54,16 +59,6 @@ export default function RichNote() {
           password_edit
         }))
 
-        console.log({
-          title: titleValue,
-          note_type: "RichNote",
-          status: statusValue,
-          content: editorValue,
-          folder_id: folderValue,
-          password_access,
-          password_edit
-        });
-
       } else {
         dispatch(createNote({
           title: titleValue,
@@ -72,17 +67,7 @@ export default function RichNote() {
           content: editorValue,
           folder_id: folderValue,
         }))
-
-        console.log({
-          title: titleValue,
-          note_type: "RichNote",
-          status: statusValue,
-          content: editorValue,
-          folder_id: folderValue,
-        });
-
       }
-
     }
   };
 
@@ -98,7 +83,7 @@ export default function RichNote() {
 
         <Editor
           onInit={(evt, editor) => editorRef.current = editor}
-          apiKey='36eoq21c3oufqsxwph8kro700eiewqbshmx5mua6023wrkpy'
+          apiKey={APIKEY_TIMYCLOUND}
           init={{
             plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed linkchecker a11ychecker tinymcespellchecker permanentpen powerpaste advtable advcode editimage advtemplate ai mentions tinycomments tableofcontents footnotes mergetags autocorrect typography inlinecss markdown',
             toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
@@ -123,15 +108,11 @@ export default function RichNote() {
         {userInformation?.user?.role === "GUEST" ? <select class="form-select mt-3" ref={statusRef} aria-label="Default select example" >
           <option value="public">Public</option>
           <option value="private">Private</option>
-        </select> : <button type="button" class="btn btn-default mt-3" data-bs-toggle="modal" data-bs-target="#modelsetstatus">
+        </select> : <button type="button" class="button-4 mt-3" data-bs-toggle="modal" data-bs-target="#modelsetstatus">
           Note Read Permission
         </button>}
-
-
         <br />
-
-
-        <button type="button" onClick={() => handleSubmit()} class="btn btn-primary mt-3">Submit</button>
+        <button type="button" onClick={() => handleSubmit()} class="button-8 mt-3">Create Note</button>
       </form>
       {
         userInformation?.user?.role !== "GUEST" ? <div class="modal fade" id="modelsetstatus" tabindex="-1" aria-labelledby="modelsetstatus" aria-hidden="true">
@@ -160,9 +141,6 @@ export default function RichNote() {
                     </div>
                   </div>
                 </form>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
               </div>
             </div>
           </div>

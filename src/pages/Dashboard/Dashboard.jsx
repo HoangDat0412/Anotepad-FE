@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import { getDashboardInfo } from '../../redux/features/user/userSlice';
@@ -7,9 +7,13 @@ export default function Dashboard() {
 
     const dispatch = useDispatch();
     const { dashboardInfo } = useSelector(state => state.userSlice)
-    useEffect(() => {
-        dispatch(getDashboardInfo())
-    }, [])
+    const fetchDashboardInfo = useCallback(() => {
+        dispatch(getDashboardInfo());
+      }, [dispatch]);
+      
+      useEffect(() => {
+        fetchDashboardInfo();
+      }, [fetchDashboardInfo]);
 
     return (
         <div className='container'>
@@ -93,10 +97,10 @@ export default function Dashboard() {
                     <tbody>
                         {dashboardInfo?.lastestUser?.map(user=>(
                         <tr>
-                            <th scope="row">1</th>
+                            <th scope="row">{user?.id}</th>
                             <td>{user?.email}</td>
                             <td>{user?.role}</td>
-                            <td>{ moment(user?.createdAt).format('dd/mm/yyyy') }</td>
+                            <td>{ moment(user?.createdAt).format('DD-MM-YYYY') }</td>
                         </tr>
                         ))}
 

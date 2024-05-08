@@ -14,8 +14,8 @@ export default function Login() {
   const navigate = useNavigate()
 
   const handleRegister = ()=>{
-    !checkNull(emailRef.current.value) ? setErrEmail("email không được bỏ trống") : setErrEmail(false)
-    !checkNull(passwordRef.current.value) ? setErrPassword("email không được bỏ trống") : setErrPassword(false)
+    !checkNull(emailRef.current.value) ? setErrEmail("email must is not null") : setErrEmail(false)
+    !checkNull(passwordRef.current.value) ? setErrPassword("password must is not null") : setErrPassword(false)
     const flag = checkNull(emailRef.current.value) && checkNull(passwordRef.current.value)
     if(flag){
       dispatch(loginApi({
@@ -23,10 +23,9 @@ export default function Login() {
         password:passwordRef.current.value
       }))
     }
-    
-    if(responseLogin){
-      navigate('/')
-    }
+  }
+  if(responseLogin){
+    navigate('/')
   }
   return (
     <div className='container'>
@@ -51,12 +50,15 @@ export default function Login() {
                   </div>
 
 
-                  <div data-mdb-input-init class="form-outline mb-4">
+                  <div data-mdb-input-init class="form-outline">
                     <input type="password" id="form3Example4" ref={passwordRef} class="form-control" placeholder='Password '/>
                     <p style={{color:"red"}}>{errPassWord}</p>
                   </div>
 
-                  <button type="button" onClick={()=> handleRegister()} data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block mb-4">
+                  <NavLink to='/forgotpassword' style={{textAlign:"right",fontSize:"14px"}}>Forgot password ?</NavLink>
+                  <br />
+
+                  <button type="button" onClick={()=> handleRegister()} data-mdb-button-init data-mdb-ripple-init className="button-8 mt-4 mb-4">
                     Sign in
                   </button>
 

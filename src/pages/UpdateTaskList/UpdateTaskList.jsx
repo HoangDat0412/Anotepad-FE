@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { accessPermissionApi, getNote, getNotePermission } from '../../redux/features/note/noteSlice';
@@ -8,10 +8,14 @@ import TaskListViewOnly from '../../components/TaskListViewOnly/TaskListViewOnly
 export default function UpdateTaskList() {
   const dispatch = useDispatch()
   const param = useParams()
+  const fetchNoteData = useCallback(() => {
+    dispatch(getNote(param.id));
+    dispatch(getNotePermission(param.id));
+  }, [dispatch, param.id]);
+  
   useEffect(() => {
-    dispatch(getNote(param.id))
-    dispatch(getNotePermission(param.id))
-  }, []);
+    fetchNoteData();
+  }, [fetchNoteData]);
   const passwordAccess = useRef("")
   const handleAccess = ()=>{
     dispatch(accessPermissionApi({

@@ -13,7 +13,7 @@ export default function CardNote(props) {
                 <div className='d-flex align-items-center justify-content-between w-100 mt-auto'>
                     <p className='' style={{ margin: "0", fontSize: "14px" }}>{moment(props?.note?.createdAt).format("DD/MM/YYYY")}</p>
                     <div className="prompt-icon-container ng-star-inserted ">
-                        <i onClick={()=> dispatch(deleteNote(props?.note?.id))} className="fa fa-trash-alt"></i>
+                        <button className='button-45'><i onClick={()=> dispatch(deleteNote(props?.note?.id))} className="fa fa-trash-alt"></i></button>
                     </div>
                 </div>
             </div>
@@ -23,9 +23,9 @@ export default function CardNote(props) {
             <div to={`/updatetasklist/${props?.note?.id}`} role="button" className="prompt-container d-block d-flex align-items-start p-3">
                  <NavLink to={`/updatetasklist/${props?.note?.id}`} className="prompt-text-content ">{props?.note?.title}</NavLink>
                 <div className='d-flex align-items-center justify-content-between w-100 mt-auto'>
-                    <p  style={{ margin: "0", fontSize: "14px" }}>{moment(props?.note?.createdAt).format("DD/MM/YYYY")}</p>
+                    <p  style={{ margin: "0", fontSize: "13px" }}>{moment(props?.note?.createdAt).format("DD/MM/YYYY")}</p>
                     <div className="prompt-icon-container ng-star-inserted">
-                        <i onClick={()=> dispatch(deleteNote(props?.note?.id))} className="fa fa-trash-alt"></i>
+                    <button className='button-45'><i onClick={()=> dispatch(deleteNote(props?.note?.id))} className="fa fa-trash-alt"></i></button>
                     </div>
                 </div>
             </div>
