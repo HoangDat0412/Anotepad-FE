@@ -1,4 +1,4 @@
-export const DOMAIN = "http://htad.id.vn/api/anotepad";
+export const DOMAIN = "https://htad.id.vn/api/anotepad";
 export const DOMAIN_FE = 'http://117.1.29.215:3000'
 export const TOKEN = "accessToken";
 export const USER_LOGIN = "USER_LOGIN";
