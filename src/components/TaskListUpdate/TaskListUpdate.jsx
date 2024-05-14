@@ -83,7 +83,7 @@ export default function TaskListUpdate() {
   return (
     <div className='container-fluid container-lg'>
       <div className='d-flex justify-content-between mt-2 '>
-        <h1 className='bard-hello'>{noteDetail?.note?.note_type}</h1>
+        <h1 className='bard-hello pt-0 pt-lg-4'>{noteDetail?.note?.note_type}</h1>
         <div className='d-flex align-items-center gap-3'>
           {noteDetail?.note?.user_id === userInformation?.user?.id ? <div>
             {
@@ -124,7 +124,7 @@ export default function TaskListUpdate() {
         <div class="d-flex gap-2 align-items-end ">
           <div data-mdb-input-init class="form-outline">
             <label style={{ fontSize: "14px" }} className="form-label">New Task</label>
-            <input type="text" ref={newTaskRef} class="form-control" placeholder='Add new task here' />
+            <input type="text" ref={newTaskRef} class="form-control" />
 
           </div>
           <div >
@@ -164,7 +164,7 @@ export default function TaskListUpdate() {
           </tbody>
         </table>
         {
-          noteDetail?.note?.user_id === userInformation?.user?.id ? (
+          noteDetail?.note?.user_id === userInformation?.user?.id && listFolder.length > 0 ? (
             <select class="form-select mt-3" value={noteDetail?.note?.folder} onChange={(e) => dispatch(setFolderAction(e.target.value))} aria-label="Default select example">
               <option value={null} >Choose Folder</option>
               {listFolder?.map((folder) => (

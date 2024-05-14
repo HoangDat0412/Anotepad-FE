@@ -105,7 +105,7 @@ export default function TaskLists() {
 
   return (
     <div className='container-fluid container-lg'>
-      <h1 class="bard-hello">TaskList</h1>
+      <h1 class="bard-hello pt-0 pt-lg-4">TaskList</h1>
       <form className='mt-3'>
         <div class="mb-3">
           <input type="text" class="form-control" ref={titleRef} placeholder='Note Title' />
@@ -114,7 +114,7 @@ export default function TaskLists() {
         <div class="d-flex gap-2 align-items-end ">
           <div data-mdb-input-init class="form-outline">
             <label style={{fontSize:"14px"}} className="form-label">New Task</label>
-            <input type="text" value={newTask} onChange={(e) => setNewTask(e.target.value)} class="form-control" placeholder='Add new task here' />
+            <input type="text" value={newTask} onChange={(e) => setNewTask(e.target.value)} class="form-control" />
             
           </div>
           <div >
@@ -156,14 +156,14 @@ export default function TaskLists() {
         </table> : ""
         }
 
-
-
-        <select class="form-select mt-4" value={folderRef} onChange={(e) => setFolderRef(e.target.value)} aria-label="Default select example">
-          <option value={0} >Choose Folder</option>
+        {
+          listFolder.length > 0 ?         <select class="form-select mt-3" value={folderRef} onChange={(e) => setFolderRef(e.target.value)} aria-label="Default select example">
+          <option >Choose Folder</option>
           {listFolder?.map((folder) => (
             <option value={folder?.id} >{folder?.name}</option>
           ))}
-        </select>
+        </select> : ""
+        }
 
         {userInformation?.user?.role === "GUEST" ? <select class="form-select mt-3" ref={statusRef} aria-label="Default select example" >
           <option value="private">Private</option>

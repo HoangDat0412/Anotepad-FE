@@ -26,7 +26,7 @@ export default function RichNoteViewOnly() {
   const shareUrl = `${DOMAIN_FE}/updaterichnote/${param.id}`;
   return (
     <div className='container-fluid container-lg richnote'>
-      <div className='d-flex justify-content-between mt-2 '>
+      <div className='d-flex justify-content-between mt-2 pt-0 pt-lg-4'>
         <h1 className='bard-hello'>{noteDetail?.note?.note_type}</h1>
         <div class="dropdown">
           <button style={{ fontWeight: "bold" }} class="button-8 dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">

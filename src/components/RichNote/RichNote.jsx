@@ -61,7 +61,7 @@ export default function RichNoteEdit() {
   };
   const shareUrl = `${DOMAIN_FE}/updaterichnote/${param.id}`;
   return (
-    <div className='container-fluid container-lg richnote'>
+    <div className='container-fluid container-lg richnote pt-0 pt-lg-4'>
       <div className='d-flex justify-content-between mt-2 '>
         <h1 className='bard-hello'>{noteDetail?.note?.note_type}</h1>
         <div className='d-flex align-items-center gap-3'>
@@ -121,7 +121,7 @@ export default function RichNoteEdit() {
 
         {errEditer ? <p style={{ color: "red" }}>{errEditer}</p> : null}
         {
-          noteDetail?.note?.user_id === userInformation?.user?.id ? (
+          noteDetail?.note?.user_id === userInformation?.user?.id && listFolder.length > 0 ? (
             <select class="form-select mt-3" value={noteDetail?.note?.folder} onChange={(e) => dispatch(setFolderAction(e.target.value))} aria-label="Default select example">
               <option value={null} >Choose Folder</option>
               {listFolder?.map((folder) => (

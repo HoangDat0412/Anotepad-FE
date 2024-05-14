@@ -7,6 +7,7 @@ import CardNote from '../../components/CardNote/CardNote'
 import FolderName from '../../components/FolderName/FolderName.jsx'
 import './folder.scss'
 import { NavLink } from 'react-router-dom'
+import Home from '../Home/Home.jsx'
 export default function Folder() {
   const dispatch = useDispatch()
   const [folder, setFolder] = useState("")
@@ -35,7 +36,7 @@ export default function Folder() {
 
   return (
     <div className='container-fluid container-lg' >
-      <h2 class="bard-hello">Dashboard</h2>
+      <h2 class="bard-hello pt-0 pt-lg-4">Dashboard</h2>
 
       <div class="input-group mt-3">
         <input value={folder} onChange={(e) => setFolder(e.target.value)} placeholder="Folder Name" type="text" class="form-control" />
@@ -77,7 +78,7 @@ export default function Folder() {
             {
               listNote?.notes?.map(note => (
                 <div className="col-6 col-sm-4 col-lg-3 p-1 mb-3 d-flex justify-content-center" key={note?.id}>
-                  <CardNote note={note} key={note?.id} />
+                  <CardNote note={note} key={note?.id} type="Folder" folderID={listNote?.folder?.id || 0} />
                 </div>
               ))
             }
@@ -85,6 +86,8 @@ export default function Folder() {
           </div>
         </div>
       </div>
+
+      <Home/>
 
     </div>
   )

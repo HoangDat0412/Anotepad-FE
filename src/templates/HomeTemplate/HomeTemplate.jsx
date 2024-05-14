@@ -68,12 +68,12 @@ export default function HomeTemplate() {
                 </span>
               </div>
 
-              <NavLink to='/managernote' className="tree__action sidebar__action">
+              {/* <NavLink to='/managernote' className="tree__action sidebar__action">
                 <span aria-current="page" className="tree__link nuxt-link-exact-active nuxt-link-active">
                   <i className="tree__icon fa-solid fa-file"></i>
                   <span className="tree__link-text"><span className="sidebar__item-name">Manager Note</span></span>
                 </span>
-              </NavLink>
+              </NavLink> */}
 
               <NavLink to='/features' className="tree__action sidebar__action">
                 <span aria-current="page" className="tree__link nuxt-link-exact-active nuxt-link-active">
@@ -177,14 +177,14 @@ export default function HomeTemplate() {
                       </span>
                     </div>
                   </li>
-                  <li class="tree__item">
+                  {/* <li class="tree__item">
                     <NavLink to='/managernote' className="tree__action sidebar__action">
                       <span aria-current="page" className="tree__link nuxt-link-exact-active nuxt-link-active">
                         <i className="tree__icon fa-solid fa-file"></i>
                         <span className="tree__link-text"><span className="sidebar__item-name">Manager Note</span></span>
                       </span>
                     </NavLink>
-                  </li>
+                  </li> */}
                   <li class="tree__item">
                     <NavLink to='/features' className="tree__action sidebar__action">
                       <span aria-current="page" className="tree__link nuxt-link-exact-active nuxt-link-active">

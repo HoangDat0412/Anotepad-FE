@@ -3,11 +3,12 @@ import "./home.scss"
 import { useSelector, useDispatch } from 'react-redux'
 import { getNoteTodayandMonthApi, setListHighLightNote } from '../../redux/features/note/noteSlice'
 import CardNote from '../../components/CardNote/CardNote'
-import { NavLink } from 'react-router-dom'
+// import { NavLink } from 'react-router-dom'
 
 export default function Home() {
   const dispatch = useDispatch()
-  const { noteTodayandMonth, highlightnotes } = useSelector(state => state.noteSlice)
+  const {  highlightnotes } = useSelector(state => state.noteSlice)
+  //noteTodayandMonth,
   const fetchNoteTodayAndMonth = useCallback(() => {
     dispatch(setListHighLightNote());
     dispatch(getNoteTodayandMonthApi());
@@ -19,24 +20,25 @@ export default function Home() {
 
   return (
     <div className='home container-fluid container-lg'>
+      <p></p>
       <h1 className='mt-2'><span class="bard-hello" >Highlight Topic</span></h1>
 
       <div className='row'>
         {
           highlightnotes?.length > 0 ? (highlightnotes?.map((item) => (
             <div className='p-1 col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2 mb-3 d-flex justify-content-center' >
-              <CardNote note={item} key={item?.id} />
+              <CardNote note={item} key={item?.id} type="Highlight" />
             </div>
           ))) : <p style={{ color: '#747775' }}>Please Highlight The New Topic</p>
         }
       </div>
 
-      <h1 className='mt-2'><span class="bard-hello" >New Note</span></h1>
-      <div className='row'>
+      {/* <h1 className='mt-2'><span class="bard-hello" >New Note Today</span></h1>
+      <div className='row mb-4'>
         {
           (noteTodayandMonth?.notesToday?.map((item, index) => (
             <div className='p-1 col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2 mb-3 d-flex justify-content-center'>
-              <CardNote note={item} key={item?.id} />
+              <CardNote note={item} key={item?.id} type="Today" />
             </div>
           ))) 
         }
@@ -46,10 +48,10 @@ export default function Home() {
             <NavLink to={`/tasklists/0`} className='button-8'>Create Your First TaskList</NavLink>
           </div>
         }
-      </div>
+      </div> */}
 
 
-      <h1 className='mt-2'><span class="bard-hello" >Pass 30 days</span></h1>
+      {/* <h1 className='mt-2'><span class="bard-hello" >Pass 30 days</span></h1>
 
       <div className='row'>
         {
@@ -59,7 +61,7 @@ export default function Home() {
             </div>
           ))) : <p style={{ color: '#747775' }}>Not found Your Note In Pass 30 Days</p>
         }
-      </div>
+      </div> */}
 
     </div>
   )

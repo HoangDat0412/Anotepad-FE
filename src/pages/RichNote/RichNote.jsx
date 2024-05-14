@@ -75,7 +75,7 @@ export default function RichNote() {
   return (
     <div className='container-fluid richnote container-lg'>
 
-      <h1 className='bard-hello mt-2'>RichNote</h1>
+      <h1 className='bard-hello mt-2 pt-0 pt-lg-4'>RichNote</h1>
       <form className='mt-3'>
         <div class="mb-3">
           <input type="text" class="form-control" ref={titleRef} placeholder='Note Title' />
@@ -100,12 +100,15 @@ export default function RichNote() {
         />
 
         {errEditer ? <p style={{ color: "red" }}>{errEditer}</p> : null}
-        <select class="form-select mt-3" value={folderRef} onChange={(e) => setFolderRef(e.target.value)} aria-label="Default select example">
+        {
+          listFolder.length > 0 ?         <select class="form-select mt-3" value={folderRef} onChange={(e) => setFolderRef(e.target.value)} aria-label="Default select example">
           <option >Choose Folder</option>
           {listFolder?.map((folder) => (
             <option value={folder?.id} >{folder?.name}</option>
           ))}
-        </select>
+        </select> : ""
+        }
+
         {userInformation?.user?.role === "GUEST" ? <select class="form-select mt-3" ref={statusRef} aria-label="Default select example" >
           <option value="public">Public</option>
           <option value="private">Private</option>

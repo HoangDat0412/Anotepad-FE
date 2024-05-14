@@ -13,7 +13,7 @@ export default function CardNote(props) {
                 <div className='d-flex align-items-center justify-content-between w-100 mt-auto'>
                     <p className='' style={{ margin: "0", fontSize: "14px" }}>{moment(props?.note?.createdAt).format("DD/MM/YYYY")}</p>
                     <div className="prompt-icon-container ng-star-inserted ">
-                        <button className='button-45'><i onClick={()=> dispatch(deleteNote(props?.note?.id))} className="fa fa-trash-alt"></i></button>
+                        <button className='button-45'><i onClick={()=> dispatch(deleteNote(props?.note?.id,props?.type,props?.folderID))} className="fa fa-trash-alt"></i></button>
                     </div>
                 </div>
             </div>
@@ -25,7 +25,7 @@ export default function CardNote(props) {
                 <div className='d-flex align-items-center justify-content-between w-100 mt-auto'>
                     <p  style={{ margin: "0", fontSize: "13px" }}>{moment(props?.note?.createdAt).format("DD/MM/YYYY")}</p>
                     <div className="prompt-icon-container ng-star-inserted">
-                    <button className='button-45'><i onClick={()=> dispatch(deleteNote(props?.note?.id))} className="fa fa-trash-alt"></i></button>
+                    <button className='button-45'><i onClick={()=> dispatch(dispatch(deleteNote(props?.note?.id,props?.type,props?.folderID)))} className="fa fa-trash-alt"></i></button>
                     </div>
                 </div>
             </div>

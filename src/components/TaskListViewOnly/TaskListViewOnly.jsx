@@ -35,7 +35,7 @@ export default function TaskListViewOnly() {
   return (
     <div className='container-fluid container-lg'>
           <div className='d-flex justify-content-between mt-2 '>
-        <h1 className='bard-hello'>{noteDetail?.note?.note_type}</h1>
+        <h1 className='bard-hello pt-0 pt-lg-4'>{noteDetail?.note?.note_type}</h1>
         <div class="dropdown">
           <button style={{ fontWeight: "bold" }} class="button-8 dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
             Share

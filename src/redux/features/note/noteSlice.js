@@ -77,7 +77,6 @@ export const getAllNote = () => {
       const result = await service.get(`/note`)
       if(result.status === 200){
         dispatch(setListNoteAction(result.data));
-        console.log("set list note",result.data);
       }
     } catch (error) {
       // dispatch(setErrorRegister(error));
@@ -93,7 +92,6 @@ export const getNoteInFolder = (id) => {
         const result = await service.get(`/folder/${id}`)
         if(result.status === 200){
           dispatch(setListNoteAction(result?.data))
-          console.log("set lít note folder",result?.data);
         }
       } catch (error) {
         console.log(error);
@@ -142,12 +140,35 @@ export const getNote = (id) => {
     }
   };
 };
-export const deleteNote = (id) => {
+export const deleteNote = (id,type,folderid) => {
   return async (dispatch) => {
     try {
       const res = await service.delete(`/note/${id}`)
       if(res.status === 200){
-        dispatch(getNoteTodayandMonthApi())
+        if(type === "Today"){
+          // dispatch(getNoteTodayandMonthApi())
+          dispatch(getAllNote())
+          dispatch(setListHighLightNote())
+        }
+        if(type === "Highlight"){
+          dispatch(setListHighLightNote())
+          dispatch(getAllNote())
+          // dispatch(getNoteTodayandMonthApi())
+        }
+        if(type === "Folder"){
+          if(folderid === 0){
+            dispatch(getAllNote())
+            dispatch(setListHighLightNote())
+            // dispatch(getNoteTodayandMonthApi())
+          }else{
+            dispatch(getNote(folderid))
+            dispatch(setListHighLightNote())
+            // dispatch(getNoteTodayandMonthApi())
+          }
+        }
+
+        // dispatch(getAllNote())
+
       }
     } catch (error) {
       console.log(error);
@@ -232,7 +253,7 @@ export const setHighLightNote = (id)=>{
   }
 }
 
-export const setListHighLightNote = (id)=>{
+export const setListHighLightNote = ()=>{
   return async (dispatch) =>{
     try {
       const result = await service.get(`/note/highlights/list`)
@@ -241,6 +262,7 @@ export const setListHighLightNote = (id)=>{
       }
     } catch (error) {
       console.log(error);
+      dispatch(setListHighLight({}))
     }
   }
 }
