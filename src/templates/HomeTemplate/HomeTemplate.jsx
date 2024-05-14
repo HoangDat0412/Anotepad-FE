@@ -2,7 +2,7 @@ import React, { useCallback, useEffect } from 'react'
 import { NavLink, Outlet } from 'react-router-dom'
 import "./hometemplate.scss"
 import { useSelector, useDispatch } from 'react-redux'
-import { setShowSidebar } from '../../redux/features/loading/loadingSlice'
+// import { setShowSidebar } from '../../redux/features/loading/loadingSlice'
 import { getUserInfomation, logoutActionApi, registerCookieActionApi } from '../../redux/features/user/userSlice'
 
 import logo from '../../assests/img/logo.png'
@@ -12,7 +12,7 @@ import Search from '../../pages/Search/Search'
 export default function HomeTemplate() {
 
   const dispatch = useDispatch()
-  const { showSidebar } = useSelector(state => state.loadingSlice)
+  // const { showSidebar } = useSelector(state => state.loadingSlice)
   const { userInformation } = useSelector(state => state.userSlice)
   const fetchData = useCallback(() => {
     dispatch(registerCookieActionApi());
@@ -22,77 +22,71 @@ export default function HomeTemplate() {
     fetchData()
   }, [fetchData])
   return (
-    <div className='container-fluid hometemplate'>
-      <div className="row flex-nowrap" style={{ height: "100vh" }}>
-        {
-          showSidebar ? <div className="d-none d-md-block col-auto sidebar">
-            <div className='sidebar-inner'>
-              <div className='sidebar__header'>
-                <div class="sidebar__logo mt-1">
-                  <NavLink to='/' className="fs-5">
-                    <img className='img-fluid' width={50} src={logo} alt="" />
-                    <span style={{ fontWeight: 'lighter', fontSize: '18px' }}>Smart Notes</span>
-                  </NavLink>
-                </div>
-                <div >
-                  <span onClick={() => { dispatch(setShowSidebar(false)) }} class="sidebar__foot-link"><i class="fa-solid fa-angles-left sidebar__foot-link-icon"></i></span>
-                </div>
-              </div>
-              <div class="sidebar__nav">
-                <ul class="tree">
-                  <li class="tree__item">
-                    <NavLink to='/' className="tree__action sidebar__action">
-                      <span aria-current="page" className="tree__link nuxt-link-exact-active nuxt-link-active">
-                        <i className="tree__icon fa-solid fa-house"></i>
+    <div className='hometemplate'>
+      <nav className="navbar navbar-expand-lg navbar-light bg-light">
+        <div className="container-fluid">
+          <NavLink to='/' className="fs-5 logo-nav">
+            <img className='img-fluid' width={50} src={logo} alt="" />
+            <span className="" style={{ fontWeight: 'lighter' }}>Smart Notes</span>
+          </NavLink>
+          <button className="navbar-toggler button-4" type="button"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasRight"
+            aria-controls="offcanvasRight">
+            <span className="navbar-toggler-icon"></span>
+          </button>
 
-                        <span className="tree__link-text"><span className="sidebar__item-name">Dashboard</span></span>
-                      </span>
-                    </NavLink>
-                  </li>
-                  <li class="tree__item">
-                    <NavLink to='/richnote' className="tree__action sidebar__action">
-                      <span aria-current="page" className="tree__link nuxt-link-exact-active nuxt-link-active">
-                        <i className="tree__icon fa-solid fa-pen"></i>
+          <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div className="navbar-nav">
+              <NavLink to='/' className="tree__action sidebar__action">
+                <span aria-current="page" className="tree__link nuxt-link-exact-active nuxt-link-active">
+                  <i className="tree__icon fa-solid fa-house"></i>
 
-                        <span className="tree__link-text"><span className="sidebar__item-name">Create Note</span></span>
-                      </span>
-                    </NavLink>
-                  </li>
-                  <li class="tree__item">
-                    <NavLink to='/tasklists' className="tree__action sidebar__action">
-                      <span aria-current="page" className="tree__link nuxt-link-exact-active nuxt-link-active">
-                        <i className="tree__icon fa-solid fa-list-check"></i>
-                        <span className="tree__link-text"><span className="sidebar__item-name">New TaskList</span></span>
-                      </span>
-                    </NavLink>
-                  </li>
-                  <li class="tree__item">
-                    <div role='button' data-bs-toggle="modal" data-bs-target="#modelSearch" className="tree__action sidebar__action">
-                      <span aria-current="page" className="tree__link nuxt-link-exact-active nuxt-link-active">
-                        <i className="tree__icon fa-solid fa-search"></i>
-                        <span className="tree__link-text"><span className="sidebar__item-name">Search</span></span>
-                      </span>
-                    </div>
-                  </li>
-                  <li class="tree__item">
-                    <NavLink to='/folder' className="tree__action sidebar__action">
-                      <span aria-current="page" className="tree__link nuxt-link-exact-active nuxt-link-active">
-                        <i className="tree__icon fa-solid fa-folder"></i>
-                        <span className="tree__link-text"><span className="sidebar__item-name">Folder</span></span>
-                      </span>
-                    </NavLink>
-                  </li>
-                  <li class="tree__item">
-                    <NavLink to='/features' className="tree__action sidebar__action">
-                      <span aria-current="page" className="tree__link nuxt-link-exact-active nuxt-link-active">
-                        <i className="tree__icon fa-solid fa-fire"></i>
-                        <span className="tree__link-text"><span className="sidebar__item-name">Features</span></span>
-                      </span>
-                    </NavLink>
-                  </li>
-                </ul>
+                  <span className="tree__link-text"><span className="sidebar__item-name">Dashboard</span></span>
+                </span>
+              </NavLink>
+
+              <NavLink to='/richnote/0' className="tree__action sidebar__action">
+                <span aria-current="page" className="tree__link nuxt-link-exact-active nuxt-link-active">
+                  <i className="tree__icon fa-solid fa-pen"></i>
+
+                  <span className="tree__link-text"><span className="sidebar__item-name">Create Note</span></span>
+                </span>
+              </NavLink>
+
+              <NavLink to='/tasklists/0' className="tree__action sidebar__action">
+                <span aria-current="page" className="tree__link nuxt-link-exact-active nuxt-link-active">
+                  <i className="tree__icon fa-solid fa-list-check"></i>
+                  <span className="tree__link-text"><span className="sidebar__item-name">New TaskList</span></span>
+                </span>
+              </NavLink>
+
+              <div role='button' data-bs-toggle="modal" data-bs-target="#modelSearch" className="tree__action sidebar__action">
+                <span aria-current="page" className="tree__link nuxt-link-exact-active nuxt-link-active">
+                  <i className="tree__icon fa-solid fa-search"></i>
+                  <span className="tree__link-text"><span className="sidebar__item-name">Search</span></span>
+                </span>
               </div>
-              {userInformation?.user?.role === "GUEST" ? <div className="text-center mt-auto mb-2">
+
+              <NavLink to='/managernote' className="tree__action sidebar__action">
+                <span aria-current="page" className="tree__link nuxt-link-exact-active nuxt-link-active">
+                  <i className="tree__icon fa-solid fa-file"></i>
+                  <span className="tree__link-text"><span className="sidebar__item-name">Manager Note</span></span>
+                </span>
+              </NavLink>
+
+              <NavLink to='/features' className="tree__action sidebar__action">
+                <span aria-current="page" className="tree__link nuxt-link-exact-active nuxt-link-active">
+                  <i className="tree__icon fa-solid fa-fire"></i>
+                  <span className="tree__link-text"><span className="sidebar__item-name">Features</span></span>
+                </span>
+              </NavLink>
+
+
+            </div>
+          </div>
+          <div className='collapse navbar-collapse'>
+            {userInformation?.user?.role === "GUEST" ? <div className="text-center mt-auto mb-2">
                 <NavLink to='/login' className='button-4' style={{ padding: "7px 55px" }}><i class="fa-solid fa-right-to-bracket"></i> Login</NavLink>
               </div> : <div className="dropdown" style={{ marginTop: 'auto' }}>
                 <span className="sidebar__user w-100 dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
@@ -101,7 +95,7 @@ export default function HomeTemplate() {
                   </div>
                   <div className="sidebar__user-info">
                     <div className="sidebar__user-info-top">
-                      <div className="sidebar__user-name">{userInformation?.user?.user_name || 'User Name'}</div>
+                      <div className="sidebar__user-name">{userInformation?.user?.user_name}</div>
                       <i className="sidebar__user-icon fa-solid fa-angle-down"></i>
                     </div>
                     <div className="sidebar__user-email">{userInformation?.user?.email}</div>
@@ -113,114 +107,14 @@ export default function HomeTemplate() {
                   <li><button className="setting_btn" onClick={() => dispatch(logoutActionApi())}><i class="fa-solid fa-arrow-right-from-bracket"></i> Sign out</button></li>
                 </ul>
               </div>}
-
-
             </div>
-          </div> : <div className="d-none d-md-block col-auto sidebar" >
-            <div className='sidebar-inner align-items-center' style={{ width: "58px" }}>
-              <div class="mt-3">
-                <NavLink to='/' title="Smartnote">
-                  <div class="logo mb-1">
-                    <img src={logo} height="45" alt="Smartnote" />
-                  </div>
-                </NavLink>
-              </div>
-              <div className='mb-1' >
-                <span class="sidebar__foot-link" onClick={() => { dispatch(setShowSidebar(true)) }}><i class="fa-solid fa-angles-right sidebar__foot-link-icon" style={{ fontSize: "14px" }}></i></span>
-              </div>
-              <div class="sidebar__nav">
-                <ul class="tree">
-                  <li class="tree__item">
-                    <NavLink to='/' className="tree__action sidebar__action">
-                      <span aria-current="page" className="tree__link nuxt-link-exact-active nuxt-link-active">
-                        <i className="tree__icon fa-solid fa-house"></i>
-                      </span>
-                    </NavLink>
-                  </li>
-                  <li class="tree__item">
-                    <NavLink to='/richnote' className="tree__action sidebar__action">
-                      <span aria-current="page" className="tree__link nuxt-link-exact-active nuxt-link-active">
-                        <i className="tree__icon fa-solid fa-pen"></i>
-                      </span>
-                    </NavLink>
-                  </li>
-                  <li class="tree__item">
-                    <NavLink to='/tasklists' className="tree__action sidebar__action">
-                      <span aria-current="page" className="tree__link nuxt-link-exact-active nuxt-link-active">
-                        <i className="tree__icon fa-solid fa-list-check"></i>
-                      </span>
-                    </NavLink>
-                  </li>
-                  <li class="tree__item">
-                    <div role='button' data-bs-toggle="modal" data-bs-target="#modelSearch" className="tree__action sidebar__action">
-                      <span aria-current="page" className="tree__link nuxt-link-exact-active nuxt-link-active">
-                        <i className="tree__icon fa-solid fa-search"></i>
-                      </span>
-                    </div>
-                  </li>
-                  <li class="tree__item">
-                    <NavLink to='/folder' className="tree__action sidebar__action">
-                      <span aria-current="page" className="tree__link nuxt-link-exact-active nuxt-link-active">
-                        <i className="tree__icon fa-solid fa-folder"></i>
-                      </span>
-                    </NavLink>
-                  </li>
-                  <li class="tree__item">
-                    <NavLink to='/features' className="tree__action sidebar__action">
-                      <span aria-current="page" className="tree__link nuxt-link-exact-active nuxt-link-active">
-                        <i className="tree__icon fa-solid fa-fire"></i>
-                      </span>
-                    </NavLink>
-                  </li>
-                </ul>
-              </div>
-              {
-                userInformation?.user?.role === "GUEST" ? <div className="text-center mt-auto mb-2">
-                  <NavLink to='/login' style={{ padding: "5px 7px" }} className='button-4' ><i class="fa-solid fa-right-to-bracket"></i></NavLink>
-                </div> : <div className="dropdown" style={{ marginTop: 'auto' }}>
-                  <span className="sidebar__user w-100 dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                    <div className="avatar">
-                      <img src="https://i.pinimg.com/564x/c6/e5/65/c6e56503cfdd87da299f72dc416023d4.jpg" alt='avatar' />
-                    </div>
-                  </span>
-                  <ul className="dropdown-menu " aria-labelledby="dropdownMenuButton1">
-                    <li><NavLink to='/account' className="setting_btn" ><i class="fa-solid fa-gear"></i> Setting</NavLink></li>
-                    <li><button className="setting_btn" onClick={() => dispatch(logoutActionApi())}><i class="fa-solid fa-arrow-right-from-bracket"></i> Sign out</button></li>
-                  </ul>
-                </div>
-              }
-
-
-            </div>
-          </div>
-        }
-        <div className="col py-3 content">
-          <nav
-            class="navbar navbar-expand-md d-md-none"
-          >
-            <div class="container-fluid">
-              <NavLink to='/' className="fs-5">
-                <img className='img-fluid' width={50} src={logo} alt="" />
-                <span className="" style={{ fontWeight: 'lighter' }}>Smart Notes</span>
-              </NavLink>
-
-              <button
-                className='btn btn-default'
-                data-bs-toggle="offcanvas"
-                data-bs-target="#offcanvasRight"
-                aria-controls="offcanvasRight"
-              >
-                <i style={{ fontSize: "20px" }} class="fa-solid fa-bars"></i>
-              </button>
-            </div>
-          </nav>
-          <Outlet />
         </div>
+      </nav>
+      <div className="col content" style={{ marginTop: "100px" }}>
+        <Outlet />
       </div>
-
-
       <div
-        className="offcanvas offcanvas-end d-md-none"
+        className="offcanvas offcanvas-end d-lg-none"
         tabindex="-1"
         id="offcanvasRight"
         aria-labelledby="offcanvasRightLabel"
@@ -259,7 +153,7 @@ export default function HomeTemplate() {
                     </NavLink>
                   </li>
                   <li class="tree__item">
-                    <NavLink to='/richnote' className="tree__action sidebar__action">
+                    <NavLink to='/richnote/0' className="tree__action sidebar__action">
                       <span aria-current="page" className="tree__link nuxt-link-exact-active nuxt-link-active">
                         <i className="tree__icon fa-solid fa-pen"></i>
 
@@ -268,7 +162,7 @@ export default function HomeTemplate() {
                     </NavLink>
                   </li>
                   <li class="tree__item">
-                    <NavLink to='/tasklists' className="tree__action sidebar__action">
+                    <NavLink to='/tasklists/0' className="tree__action sidebar__action">
                       <span aria-current="page" className="tree__link nuxt-link-exact-active nuxt-link-active">
                         <i className="tree__icon fa-solid fa-list-check"></i>
                         <span className="tree__link-text"><span className="sidebar__item-name">New TaskList</span></span>
@@ -276,7 +170,7 @@ export default function HomeTemplate() {
                     </NavLink>
                   </li>
                   <li class="tree__item">
-                    <div role='button' data-bs-toggle="modal" data-bs-target="#modelSearch" className="tree__action sidebar__action">
+                    <div role='button' data-bs-toggle="modal" data-bs-target="#modelSearch" className="tree__action sidebar__action" data-bs-dismiss="offcanvas" aria-label="Close">
                       <span aria-current="page" className="tree__link nuxt-link-exact-active nuxt-link-active">
                         <i className="tree__icon fa-solid fa-search"></i>
                         <span className="tree__link-text"><span className="sidebar__item-name">Search</span></span>
@@ -284,10 +178,10 @@ export default function HomeTemplate() {
                     </div>
                   </li>
                   <li class="tree__item">
-                    <NavLink to='/folder' className="tree__action sidebar__action">
+                    <NavLink to='/managernote' className="tree__action sidebar__action">
                       <span aria-current="page" className="tree__link nuxt-link-exact-active nuxt-link-active">
-                        <i className="tree__icon fa-solid fa-folder"></i>
-                        <span className="tree__link-text"><span className="sidebar__item-name">Folder</span></span>
+                        <i className="tree__icon fa-solid fa-file"></i>
+                        <span className="tree__link-text"><span className="sidebar__item-name">Manager Note</span></span>
                       </span>
                     </NavLink>
                   </li>

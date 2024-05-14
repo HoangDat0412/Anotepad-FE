@@ -6,7 +6,7 @@ import TaskItem from '../../components/TaskItem/TaskItem'
 import { checkNull } from '../../validation/validation'
 import { createNote, setCreateResultFalse } from '../../redux/features/note/noteSlice'
 import { getListFolder } from '../../redux/features/folder/folderSlice'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 export default function TaskLists() {
   const dispatch = useDispatch()
   const clearTasks = useCallback(() => {
@@ -29,9 +29,12 @@ export default function TaskLists() {
     navigate(`/updatetasklist/${createResult?.id}`)
     dispatch(setCreateResultFalse())
   }
+
+  const params = useParams()
   const titleRef = useRef("")
   const statusRef = useRef(null)
-  const folderRef = useRef(null)
+  // const folderRef = useRef(params.id)
+  const [folderRef,setFolderRef] = useState(params.folderid)
   const password_accessRef = useRef(null)
   const password_editRef = useRef(null)
   const [newTask,setNewTask] = useState('') 
@@ -46,7 +49,6 @@ export default function TaskLists() {
     checkNull(newTask) ? setErrorNewTask(false) : setErrorNewTask("task must not null")
     checkNull(deadline) ? setErrDeadline(false) : setErrDeadline("dealine must not null")
     const flag = checkNull(newTask) && checkNull(deadline)
-    
     if (flag) {
       if (TaskList.length === 0) {
         dispatch(addTask({
@@ -71,10 +73,8 @@ export default function TaskLists() {
     const titleValue = titleRef.current?.value;
     !checkNull(titleValue) ? setErrTitle("Title must not null") : setErrTitle(false)
     const statusValue = statusRef.current?.value
-    let folderValue = folderRef.current?.value
-    if (folderValue === "Choose Folder") {
-      folderValue = null
-    }
+    let folderValue = folderRef
+
     const password_access = password_accessRef.current?.value
     const password_edit = password_editRef.current?.value
     const flag = checkNull(titleValue)
@@ -104,7 +104,7 @@ export default function TaskLists() {
   };
 
   return (
-    <div className='container'>
+    <div className='container-fluid container-lg'>
       <h1 class="bard-hello">TaskList</h1>
       <form className='mt-3'>
         <div class="mb-3">
@@ -158,8 +158,8 @@ export default function TaskLists() {
 
 
 
-        <select class="form-select mt-4" ref={folderRef} aria-label="Default select example">
-          <option >Choose Folder</option>
+        <select class="form-select mt-4" value={folderRef} onChange={(e) => setFolderRef(e.target.value)} aria-label="Default select example">
+          <option value={0} >Choose Folder</option>
           {listFolder?.map((folder) => (
             <option value={folder?.id} >{folder?.name}</option>
           ))}

@@ -33,7 +33,7 @@ export default function TaskListViewOnly() {
   const shareUrl = `${DOMAIN_FE}/updatetasklist/${param.id}`;
 
   return (
-    <div className='container'>
+    <div className='container-fluid container-lg'>
           <div className='d-flex justify-content-between mt-2 '>
         <h1 className='bard-hello'>{noteDetail?.note?.note_type}</h1>
         <div class="dropdown">

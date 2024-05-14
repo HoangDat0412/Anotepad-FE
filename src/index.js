@@ -33,19 +33,19 @@ const router = createBrowserRouter([
     children:[
       {
         path: "/",
-        element:<Home/>
+        element:<Folder/>
       },
       {
-        path: "/richnote",
+        path: "/richnote/:folderid",
         element:<RichNote/>
       },
       {
-        path: "/tasklists",
+        path: "/tasklists/:folderid",
         element:<TaskLists/>
       },
       {
-        path: "/folder",
-        element:<Folder/>
+        path: "/managernote",
+        element:<Home/>
       },
       {
         path: "/features",

@@ -2,8 +2,6 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteUser, getAllUser, getUserById, setEmail, setPassword, setRole, updateUserById } from '../../redux/features/user/userSlice';
 import { checkNull } from '../../validation/validation';
-
-
 export default function ManageUser() {
    
     const dispatch = useDispatch();

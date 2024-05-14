@@ -26,21 +26,34 @@ export default function TaskItem(props) {
         dispatch(deleteTask(props?.item?.id))
     }
 
+    const handleSetTaskUpdate = (data) =>{
+        settaskUpdate(data)
+        handleUpdateTask()
+    }
+    const handleSetTaskStatus = (data) =>{
+        settaskStatusUpdate(data)
+        handleUpdateTask()
+    }
+    const handleSetDeadline = (data) =>{
+        setDeadline(data)
+        handleUpdateTask()
+    }
+
     return (
         <tr >
             <td>
-                 <input type="text" class="form-control" onChange={(e) => settaskUpdate(e.target.value)} value={taskUpdate} />
+                 <input type="text" class="form-control" onChange={(e) => handleSetTaskUpdate(e.target.value)} value={taskUpdate} />
                  <span style={{fontSize:"14px",color:"red"}}>{errTaskUpdate}</span>
             </td>
-            <td>  <select class="form-select" onChange={(e) => settaskStatusUpdate(e.target.value)} value={taskStatusUpdate} >
+            <td>  <select class="form-select" onChange={(e) => handleSetTaskStatus(e.target.value)} value={taskStatusUpdate} >
                 <option value={false}>In Progress</option>
                 <option value={true} >Done</option>
             </select></td>
             <td>  
-                <input type="date" value={deadline} onChange={(e) => setDeadline(e.target.value)} class="form-control"/>
+                <input type="date" value={deadline} onChange={(e) => handleSetDeadline(e.target.value)} class="form-control"/>
                 <span style={{fontSize:"14px",color:"red"}}>{errDeadline}</span>
             </td>
-            {props?.edit ? <td className='d-flex gap-1 justify-content-end'> <button type='button' className='button-4' onClick={() => handleUpdateTask()}>Update</button> <button className='button-45' onClick={() => handleDelete()}><i class="fa-solid fa-trash-can"></i></button>  </td> : null}
+            {props?.edit ? <td className='d-flex gap-1 justify-content-end' style={{height:"100%"}}><button style={{margin: "9px"}} className='button-45' onClick={() => handleDelete()}><i class="fa-solid fa-trash-can"></i></button>  </td> : null}
         </tr>
     )
 }

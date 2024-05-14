@@ -6,6 +6,7 @@ import { getAllNote } from '../../redux/features/note/noteSlice'
 import CardNote from '../../components/CardNote/CardNote'
 import FolderName from '../../components/FolderName/FolderName.jsx'
 import './folder.scss'
+import { NavLink } from 'react-router-dom'
 export default function Folder() {
   const dispatch = useDispatch()
   const [folder, setFolder] = useState("")
@@ -33,8 +34,8 @@ export default function Folder() {
   }
 
   return (
-    <div className='container-fluid'>
-      <h2 class="bard-hello">Manager Folder</h2>
+    <div className='container-fluid container-lg' >
+      <h2 class="bard-hello">Dashboard</h2>
 
       <div class="input-group mt-3">
         <input value={folder} onChange={(e) => setFolder(e.target.value)} placeholder="Folder Name" type="text" class="form-control" />
@@ -64,10 +65,18 @@ export default function Folder() {
           </div>
         </div>
         <div className="col-12 col-md-8 col-lg-9 pt-3 pt-md-0 ps-md-4">
+        <h2 class="bard-hello" style={{fontSize:"20px"}}>{listNote?.folder?.name}</h2>
           <div className='row'>
             {
-              listNote?.map(note => (
-                <div className="col-6 col-lg-4 col-xl-3 p-1 mb-3 d-flex justify-content-center" key={note?.id}>
+              listNote?.notes?.length ? "" : <div>
+                <NavLink to={`/richnote/${listNote?.folder?.id || 0}`} className='button-8 me-2'>Create Your First Note</NavLink>
+                <NavLink to={`/tasklists/${listNote?.folder?.id || 0}`} className='button-8'>Create Your First TaskList</NavLink>
+              </div> 
+            }
+            
+            {
+              listNote?.notes?.map(note => (
+                <div className="col-6 col-sm-4 col-lg-3 p-1 mb-3 d-flex justify-content-center" key={note?.id}>
                   <CardNote note={note} key={note?.id} />
                 </div>
               ))

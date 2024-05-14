@@ -9,13 +9,13 @@ export default function SettingTemplate() {
     const dispatch = useDispatch()
     const { userInformation } = useSelector(state => state.userSlice)
     const fetchData = useCallback(() => {
-      dispatch(getUserInfomation());
+        dispatch(getUserInfomation());
     }, [dispatch]);
     useEffect(() => {
-      fetchData()
+        fetchData()
     }, [fetchData])
     return (
-        <div>    <div className='container-fluid hometemplate'>
+        <div className='settingtemplate'>    <div className='container-fluid hometemplate'>
             <div className="row flex-nowrap" style={{ height: "100vh" }}>
                 <div className="col-auto sidebar">
                     <div className='sidebar-inner'>
@@ -23,7 +23,7 @@ export default function SettingTemplate() {
                             <div className="avatar">
                                 <img src="https://i.pinimg.com/564x/c6/e5/65/c6e56503cfdd87da299f72dc416023d4.jpg" alt='avatar' />
                             </div>
-                            <div className="sidebar__user-info">
+                            <div className="d-none d-sm-block sidebar__user-info">
                                 <div className="sidebar__user-info-top">
                                     <div className="sidebar__user-name">{userInformation?.user?.user_name || "User Name"}</div>
                                     <i className="sidebar__user-icon fa-solid fa-angle-down"></i>
@@ -41,7 +41,7 @@ export default function SettingTemplate() {
                                         <span aria-current="page" className="tree__link nuxt-link-exact-active nuxt-link-active">
                                             <i className="tree__icon fa-solid fa-user"></i>
 
-                                            <span className="tree__link-text"><span className="sidebar__item-name">Account</span></span>
+                                            <span className="tree__link-text d-none d-sm-block"><span className="sidebar__item-name">Account</span></span>
                                         </span>
                                     </NavLink>
                                 </li>
@@ -50,15 +50,15 @@ export default function SettingTemplate() {
                                     <NavLink to='/loginhistory' className="tree__action sidebar__action">
                                         <span aria-current="page" className="tree__link nuxt-link-exact-active nuxt-link-active">
                                             <i className="tree__icon fa-solid fa-clock-rotate-left"></i>
-                                            <span className="tree__link-text"><span className="sidebar__item-name">Login History</span></span>
+                                            <span className="tree__link-text d-none d-sm-block"><span className="sidebar__item-name">Login History</span></span>
                                         </span>
                                     </NavLink>
                                 </li>
-                                <li class="tree__item" style={{cursor:'pointer'}}>
+                                <li class="tree__item" style={{ cursor: 'pointer' }}>
                                     <div className="tree__action sidebar__action">
-                                        <span aria-current="page" className="tree__link nuxt-link-exact-active nuxt-link-active" style={{color:"rgb(235, 87, 87)"}}>
-                                            <i style={{color:"rgb(235, 87, 87)"}} className="tree__icon fa-solid fa-x"></i>
-                                            <span className="tree__link-text"><span className="sidebar__item-name">Delete Account</span></span>
+                                        <span aria-current="page" className="tree__link nuxt-link-exact-active nuxt-link-active" style={{ color: "rgb(235, 87, 87)" }}>
+                                            <i style={{ color: "rgb(235, 87, 87)" }} className="tree__icon fa-solid fa-x"></i>
+                                            <span className="tree__link-text d-none d-sm-block"><span className="sidebar__item-name">Delete Account</span></span>
                                         </span>
                                     </div>
                                 </li>
@@ -66,7 +66,7 @@ export default function SettingTemplate() {
                                     <NavLink to='/' className="tree__action sidebar__action">
                                         <span aria-current="page" className="tree__link nuxt-link-exact-active nuxt-link-active">
                                             <i className="tree__icon fa-solid fa-home"></i>
-                                            <span className="tree__link-text"><span className="sidebar__item-name">Daskboard</span></span>
+                                            <span className="tree__link-text d-none d-sm-block"><span className="sidebar__item-name">Daskboard</span></span>
                                         </span>
                                     </NavLink>
                                 </li>

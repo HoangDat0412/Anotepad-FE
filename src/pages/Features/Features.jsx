@@ -2,7 +2,7 @@ import React from 'react'
 import "./feature.scss"
 export default function Features() {
   return (
-    <div className='container feature'>
+    <div className='container-fluid container-lg feature'>
       <div class="displayContent">
         <h2 class="bard-hello">Getting Started</h2>
         <ul>

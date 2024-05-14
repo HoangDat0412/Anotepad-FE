@@ -3,7 +3,7 @@ import { service } from '../../../services/baseService';
 import { setTask } from '../TaskList/TaskList';
 
 const initialState = {
-    listNote:[],
+    listNote:{},
     noteDetail:{},
     createResult:false,
     notePermission:false,
@@ -77,6 +77,7 @@ export const getAllNote = () => {
       const result = await service.get(`/note`)
       if(result.status === 200){
         dispatch(setListNoteAction(result.data));
+        console.log("set list note",result.data);
       }
     } catch (error) {
       // dispatch(setErrorRegister(error));
@@ -92,6 +93,7 @@ export const getNoteInFolder = (id) => {
         const result = await service.get(`/folder/${id}`)
         if(result.status === 200){
           dispatch(setListNoteAction(result?.data))
+          console.log("set lít note folder",result?.data);
         }
       } catch (error) {
         console.log(error);

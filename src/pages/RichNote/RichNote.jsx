@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { checkNull } from '../../validation/validation';
 import { createNote, setCreateResultFalse } from '../../redux/features/note/noteSlice';
 import { getListFolder } from '../../redux/features/folder/folderSlice';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { APIKEY_TIMYCLOUND } from '../../utils/config';
 export default function RichNote() {
 
@@ -26,12 +26,16 @@ export default function RichNote() {
     navigate(`/updaterichnote/${createResult?.id}`)
     dispatch(setCreateResultFalse())
   }
+  const params = useParams()
   const editorRef = useRef(null);
   const [errEditer, setErrEditor] = useState(false);
   const titleRef = useRef("")
   const [errTitle, setErrTitle] = useState(false);
   const statusRef = useRef(null)
-  const folderRef = useRef(null)
+
+  // const folderRef = useRef(params.folderid)
+  const [folderRef,setFolderRef] = useState(params.folderid)
+
   const password_accessRef = useRef(null)
   const password_editRef = useRef(null)
   const handleSubmit = () => {
@@ -40,10 +44,7 @@ export default function RichNote() {
     const titleValue = titleRef.current?.value;
     !checkNull(titleValue) ? setErrTitle("Title không được bỏ trống") : setErrTitle(false)
     const statusValue = statusRef.current?.value
-    let folderValue = folderRef.current?.value
-    if (folderValue === "Choose Folder") {
-      folderValue = null
-    }
+    let folderValue = folderRef
     const password_access = password_accessRef.current?.value
     const password_edit = password_editRef.current?.value
     const flag = checkNull(editorValue) && checkNull(titleValue)
@@ -72,7 +73,7 @@ export default function RichNote() {
   };
 
   return (
-    <div className='container richnote'>
+    <div className='container-fluid richnote container-lg'>
 
       <h1 className='bard-hello mt-2'>RichNote</h1>
       <form className='mt-3'>
@@ -99,7 +100,7 @@ export default function RichNote() {
         />
 
         {errEditer ? <p style={{ color: "red" }}>{errEditer}</p> : null}
-        <select class="form-select mt-3" ref={folderRef} aria-label="Default select example">
+        <select class="form-select mt-3" value={folderRef} onChange={(e) => setFolderRef(e.target.value)} aria-label="Default select example">
           <option >Choose Folder</option>
           {listFolder?.map((folder) => (
             <option value={folder?.id} >{folder?.name}</option>
@@ -112,7 +113,7 @@ export default function RichNote() {
           Note Read Permission
         </button>}
         <br />
-        <button type="button" onClick={() => handleSubmit()} class="button-8 mt-3">Create Note</button>
+        <button type="button" onClick={() => handleSubmit()} class="button-8 mt-3 mb-3">Create Note</button>
       </form>
       {
         userInformation?.user?.role !== "GUEST" ? <div class="modal fade" id="modelsetstatus" tabindex="-1" aria-labelledby="modelsetstatus" aria-hidden="true">

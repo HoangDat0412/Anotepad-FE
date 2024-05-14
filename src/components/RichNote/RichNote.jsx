@@ -61,7 +61,7 @@ export default function RichNoteEdit() {
   };
   const shareUrl = `${DOMAIN_FE}/updaterichnote/${param.id}`;
   return (
-    <div className='container richnote'>
+    <div className='container-fluid container-lg richnote'>
       <div className='d-flex justify-content-between mt-2 '>
         <h1 className='bard-hello'>{noteDetail?.note?.note_type}</h1>
         <div className='d-flex align-items-center gap-3'>

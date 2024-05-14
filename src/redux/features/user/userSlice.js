@@ -104,6 +104,7 @@ export const registerCookieActionApi = () => {
         dispatch(dangNhapAction(result.data));
         dispatch(getUserInfomation())
       }
+
     } catch (error) {
       console.log(error);
     }
@@ -129,6 +130,9 @@ export const getUserInfomation = ()=>{
       if(result.status === 200){
         dispatch(setInfoAction(result.data))
       }
+      if(result.status === 403){
+        dispatch(logoutActionApi())
+      }
     } catch (error) {
       console.log(error);
     }
@@ -143,7 +147,7 @@ export const loginApi = (data) =>{
         dispatch(getUserInfomation())
       }
     } catch (error) {
-      alert(error.response.data)
+      alert("wrong email or password")
     }
   };
 }
