@@ -24,7 +24,7 @@ export default function Search() {
     }
     return (
         <div className='search_model'><div class="modal fade " id="modelSearch" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog">
+            <div class="modal-dialog model-lg">
                 <div class="modal-content">
                     <div class="modal-body">
                         <div class="input-group mt-3 mb-3">

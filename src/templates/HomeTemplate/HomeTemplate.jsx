@@ -7,6 +7,7 @@ import { getUserInfomation, logoutActionApi, registerCookieActionApi } from '../
 
 import logo from '../../assests/img/logo.png'
 import Search from '../../pages/Search/Search'
+import Footer from '../../components/Footer/Footer'
 
 
 export default function HomeTemplate() {
@@ -221,7 +222,7 @@ export default function HomeTemplate() {
           </div>
         </div>
       </div>
-
+      <Footer/>            
       <Search />
     </div>
   )

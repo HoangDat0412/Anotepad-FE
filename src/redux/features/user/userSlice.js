@@ -1,11 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { TOKEN } from '../../../utils/config';
 import { service } from '../../../services/baseService';
-
-
-// const thongTinNguoiDung = localStorage.getItem("THONG_TIN_NGUOI_DUNG")
-// ? JSON.parse(localStorage.getItem("THONG_TIN_NGUOI_DUNG"))
-// : {};
+import { toast } from 'react-toastify';
 
 const initialState = {
   userLogin: null,
@@ -115,11 +111,11 @@ export const registerApi = (data)=>{
     try {
       const result = await service.post(`/user/register`,data)
       if(result.status === 201){
-        alert("Create account success. Please verify your email !")
+        toast.success("Create account success. Please verify your email !");
         dispatch(setResponseRegister(true));
       }
     } catch (error) {
-      alert(error.response.data)
+      toast.error("Create account false. Please check your information!");
     }
   };
 }
@@ -145,9 +141,10 @@ export const loginApi = (data) =>{
       if(result.status === 200){
         dispatch(dangNhapAction(result.data));
         dispatch(getUserInfomation())
+        toast.success("Login success");
       }
     } catch (error) {
-      alert("wrong email or password")
+      toast.error("Wrong email or password");
     }
   };
 }
@@ -156,11 +153,11 @@ export const updateUserApi = (data) =>{
     try {
       const result = await service.put(`/user/update`,data)
       if(result.status === 200){
-        alert("update success")
+        toast.success("Update information success");
         dispatch(getUserInfomation())
       }
     } catch (error) {
-      alert("update false")
+      toast.error("Update information false");
     }
   };
 }
@@ -195,12 +192,12 @@ export const deleteUser = (id) =>{
     try {
       const result = await service.delete(`/user/${id}`)
       if(result.status === 200){
-        alert("Delete success")
+        toast.success("Delete user success");
         dispatch(getAllUser());
       }
     } catch (error) {
       console.log(error);
-      alert("Delete false")
+      toast.error("Delete user false");
     }
   };
 }
@@ -221,10 +218,10 @@ export const updateUserById = (id,data)=>{
     try {
       const result = await service.put(`/user/${id}`,data)
       if(result.status === 200){
-        alert("update success")
+        toast.success("Update user success");
       }
     } catch (error) {
-      alert("update false")
+      toast.error("Update user false");
     }
   };
 }
@@ -244,6 +241,7 @@ export const logoutActionApi = ()=>{
   return async (dispatch) => {
     dispatch(logoutAction())
     dispatch(registerCookieActionApi())
+    toast.success("Logout success");
   }
 }
 
@@ -252,12 +250,12 @@ export const updateAccountPassword = (data) =>{
     try {
       const result = await service.post(`/user/updatepassword`,data)
       if(result.status === 200){
-        alert("update password success")
+        toast.success("Update your password success");
       }if(result.status === 401){
-        alert("password is not correct")
+        toast.error("Password is not correct");
       }
     } catch (error) {
-      alert("update false")
+      toast.error("Update false");
     }
   };
 }
@@ -267,13 +265,13 @@ export const forgotPassword = (data) => {
     try {
       const result = await service.post(`/user/forgotpassword`,data)
       if(result.status === 200){
-        alert("The link to reset your password already send to your email !")
+        toast.success("The link to reset your password already send to your email !");
       }
       if(result.status === 404){
-        alert("Not found your email !")
+        toast.error("Not found your email !");
       }
     } catch (error) {
-      alert("Not found your email !")
+      toast.error("Not found your email !");
     }
   }
 }
@@ -282,17 +280,17 @@ export const resetPassword = (email,token,data)=>{
     try {
       const result = await service.post(`/user/resetpassword/${email}/${token}`,data)
       if(result.status === 200){
-        alert("Your password change success !")
+        toast.success("Your password change success !");
         dispatch(setResetPassStatus(true))
       }
       if(result.status === 401){
-        alert("The link reset password has expired")
+        toast.error("The link reset password has expired");
       }
       if(result.status === 404){
-        alert("Not found the email")
+        toast.error("Not found the email");
       }
     } catch (error) {
-      alert("The link reset password has expired")
+      toast.error("The link reset password has expired");
     }
   }
 }

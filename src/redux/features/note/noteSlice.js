@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { service } from '../../../services/baseService';
 import { setTask } from '../TaskList/TaskList';
-
+import { toast } from 'react-toastify';
 const initialState = {
     listNote:{},
     noteDetail:{},
@@ -105,10 +105,11 @@ export const createNote = (data) =>{
       const result = await service.post('/note',data)
       if(result.status === 201){
         dispatch(setCreateResult(result.data))
+        toast.success("Create Note Success");
       }
     } catch (error) {
       console.log(error);
-      alert("Create false !")
+      toast.error("Create Note False");
     }
   }
 }
@@ -118,11 +119,11 @@ export const updateNote = (id,data) =>{
     try {
       const result = await service.put(`/note/${id}`,data)
       if(result.status === 200){
-        alert("Update success !")
+        toast.success("Update Note Success");
       }
     } catch (error) {
       console.log(error);
-      alert("Update false !")
+      toast.error("Update Note False");
     }
   }
 }
@@ -145,25 +146,26 @@ export const deleteNote = (id,type,folderid) => {
     try {
       const res = await service.delete(`/note/${id}`)
       if(res.status === 200){
+        toast.success("Delete Note Success");
         if(type === "Today"){
-          // dispatch(getNoteTodayandMonthApi())
+          dispatch(getNoteTodayandMonthApi())
           dispatch(getAllNote())
           dispatch(setListHighLightNote())
         }
         if(type === "Highlight"){
           dispatch(setListHighLightNote())
           dispatch(getAllNote())
-          // dispatch(getNoteTodayandMonthApi())
+          dispatch(getNoteTodayandMonthApi())
         }
         if(type === "Folder"){
           if(folderid === 0){
             dispatch(getAllNote())
             dispatch(setListHighLightNote())
-            // dispatch(getNoteTodayandMonthApi())
+            dispatch(getNoteTodayandMonthApi())
           }else{
             dispatch(getNote(folderid))
             dispatch(setListHighLightNote())
-            // dispatch(getNoteTodayandMonthApi())
+            dispatch(getNoteTodayandMonthApi())
           }
         }
 
@@ -195,12 +197,13 @@ export const accessPermissionApi =  (data)=>{
       if(result.status === 201){
         dispatch(getNotePermission(data.note_id))
         dispatch(getNote(data.note_id))
+        toast.success("Access success");
       }else{
-        alert("wrong password")
+        toast.error("Wrong password");
       }
     } catch (error) {
       console.log(error);
-      alert("wrong password")
+      toast.error("Wrong password");
     }
   }
 }
@@ -217,12 +220,13 @@ export const editPermissionApi =(data)=>{
       if(result.status === 200){
         dispatch(getNotePermission(data.note_id))
         dispatch(getNote(data.note_id))
+        toast.success("Access success");
       }else{
-        alert("wrong password")
+        toast.error("Wrong password");
       }
     } catch (error) {
       console.log(error);
-      alert("wrong password")
+      toast.error("Wrong password");
     }
   }
 }
@@ -244,11 +248,12 @@ export const setHighLightNote = (id)=>{
       const result = await service.get(`/note/highlight/${id}`)
       if(result.status=== 200){
         dispatch(getNote(id))
+        toast.success("Set highlight note success");
       }else{
-        alert("false to set highlight note")
+        toast.error("False to set highlight note");
       }
     } catch (error) {
-      alert("false to set highlight note")
+      toast.error("False to set highlight note");
     }
   }
 }
