@@ -25,6 +25,7 @@ import Profile from "./pages/Profile/Profile";
 import LoginHistory from "./pages/LoginHistory/LoginHistory";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword/ResetPassword";
+import RecycleBin from "./pages/RecycleBin/RecycleBin.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -94,6 +95,10 @@ const router = createBrowserRouter([
         path: "/loginhistory",
         element: <LoginHistory />,
       },
+      {
+        path: "/recycle",
+        element: <RecycleBin/>
+      }
     ],
   },
   {

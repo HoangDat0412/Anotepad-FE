@@ -11,6 +11,8 @@ export default function Profile(props) {
     // Update userName when userInformation changes
     setUserName(userInformation?.user?.user_name || '');
   }, [userInformation]); 
+
+  
   const [errUserName, setErrUserName] = useState()
 
   const [oldpass, setOldPass] = useState("")

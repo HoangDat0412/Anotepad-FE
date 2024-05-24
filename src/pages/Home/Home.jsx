@@ -50,7 +50,7 @@ export default function Home() {
         }
       </div>
 
-      {
+      {/* {
         noteTodayandMonth?.notesMonth?.length > 0 ? (
           <div>
             <h1 className='mt-2'><span class="bard-hello" >Pass 30 days</span></h1>
@@ -66,7 +66,7 @@ export default function Home() {
             </div>
           </div>
         ) : ""
-      }
+      } */}
 
 
     </div>

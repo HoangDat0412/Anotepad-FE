@@ -10,7 +10,8 @@ const initialState = {
     noteTodayandMonth:{},
     highlightnotes : [],
     notehistory:{},
-    searchResult:[]
+    searchResult:[],
+    listNoteRecycle:[]
 }
 
 export const noteSlice = createSlice({
@@ -60,12 +61,15 @@ export const noteSlice = createSlice({
     },
     setSearchResult:(state,action)=>{
       state.searchResult = action.payload
+    },
+    setListNoteRecycle:(state,action) =>{
+      state.listNoteRecycle = [...action.payload]
     }
   },
 })
 
 // Action creators are generated for each case reducer function
-export const {setSearchResult,setNoteHistoryAction,setNoteTodayandMoth,setListHighLight,setListNoteAction,setCreateResult,setCreateResultFalse,setNotePermission,setNoteDetail,setTitleAction,setStatusAction,setFolderAction,setPassword_accessAction,setPassword_editAction } = noteSlice.actions
+export const {setListNoteRecycle,setSearchResult,setNoteHistoryAction,setNoteTodayandMoth,setListHighLight,setListNoteAction,setCreateResult,setCreateResultFalse,setNotePermission,setNoteDetail,setTitleAction,setStatusAction,setFolderAction,setPassword_accessAction,setPassword_editAction } = noteSlice.actions
 
 export default noteSlice.reducer
 
@@ -141,29 +145,71 @@ export const getNote = (id) => {
     }
   };
 };
-export const deleteNote = (id,type,folderid) => {
+
+export const getListNoteRecycle = () =>{
+  return async (dispatch) =>{
+    try {
+      const result = await service.get(`/note/getlistnote/deleted`)
+      if(result.status === 200){
+        dispatch(setListNoteRecycle(result.data))
+      }
+    } catch (error) {
+      // toast.error("Get note false");
+    }
+  }
+}
+export const RecycleNote = (id) =>{
+  return async (dispatch) =>{
+    try {
+      const result = await service.get(`/note/returnnote/${id}`)
+      if(result.status === 200){
+        
+        dispatch(getListNoteRecycle())
+        toast.success("Recycle note success !")
+      }
+    } catch (error) {
+      toast.error("Recycle note false !");
+    }
+  }
+}
+export const DeleteRecycleNote = (id) =>{
+  return async (dispatch) =>{
+    try {
+      const result = await service.delete(`/note/deletenote/${id}`)
+      if(result.status === 200){
+        
+        dispatch(getListNoteRecycle())
+        toast.success("Delete recycle note success !")
+      }
+    } catch (error) {
+      toast.error("Get note false");
+    }
+  }
+}
+
+export const deleteNote = (data) => {
   return async (dispatch) => {
     try {
-      const res = await service.delete(`/note/${id}`)
+      const res = await service.delete(`/note/${data?.id}`)
       if(res.status === 200){
         toast.success("Delete Note Success");
-        if(type === "Today"){
+        if(data?.type === "Today"){
           dispatch(getNoteTodayandMonthApi())
           dispatch(getAllNote())
           dispatch(setListHighLightNote())
         }
-        if(type === "Highlight"){
+        if(data?.type === "Highlight"){
           dispatch(setListHighLightNote())
           dispatch(getAllNote())
           dispatch(getNoteTodayandMonthApi())
         }
-        if(type === "Folder"){
-          if(folderid === 0){
+        if(data?.type === "Folder"){
+          if(data?.folderid === 0){
             dispatch(getAllNote())
             dispatch(setListHighLightNote())
             dispatch(getNoteTodayandMonthApi())
           }else{
-            dispatch(getNote(folderid))
+            dispatch(getNote(data?.folderid))
             dispatch(setListHighLightNote())
             dispatch(getNoteTodayandMonthApi())
           }

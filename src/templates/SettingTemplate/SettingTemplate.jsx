@@ -54,6 +54,14 @@ export default function SettingTemplate() {
                                         </span>
                                     </NavLink>
                                 </li>
+                                <li class="tree__item">
+                                    <NavLink to='/recycle' className="tree__action sidebar__action">
+                                        <span aria-current="page" className="tree__link nuxt-link-exact-active nuxt-link-active">
+                                            <i className="tree__icon fa-solid fa-trash"></i>
+                                            <span className="tree__link-text d-none d-sm-block"><span className="sidebar__item-name">Recycle Bin</span></span>
+                                        </span>
+                                    </NavLink>
+                                </li>
                                 <li class="tree__item" style={{ cursor: 'pointer' }}>
                                     <div className="tree__action sidebar__action">
                                         <span aria-current="page" className="tree__link nuxt-link-exact-active nuxt-link-active" style={{ color: "rgb(235, 87, 87)" }}>
