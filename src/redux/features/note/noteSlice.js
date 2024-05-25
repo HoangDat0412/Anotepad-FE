@@ -60,7 +60,7 @@ export const noteSlice = createSlice({
       state.notehistory = action.payload
     },
     setSearchResult:(state,action)=>{
-      state.searchResult = action.payload
+      state.searchResult = action.payload.filter(item => item.deletenote === false)
     },
     setListNoteRecycle:(state,action) =>{
       state.listNoteRecycle = [...action.payload]
