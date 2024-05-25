@@ -57,7 +57,18 @@ export const noteSlice = createSlice({
       state.highlightnotes = action.payload
     },
     setNoteHistoryAction:(state,action) => {
-      state.notehistory = action.payload
+      // const 
+      console.log("notehistory",action.payload);
+      let NoteInMonth = action.payload?.NoteInMonth
+      NoteInMonth = NoteInMonth.filter(item => item.deletenote === 0)
+      let noteInDay = action.payload?.noteInDay
+      noteInDay = noteInDay.filter(item => item.deletenote === 0)
+      const notehistory = {
+        NoteInMonth,
+        noteInDay
+      }
+      console.log(notehistory);
+      state.notehistory = notehistory
     },
     setSearchResult:(state,action)=>{
       state.searchResult = action.payload.filter(item => item.deletenote === false)
