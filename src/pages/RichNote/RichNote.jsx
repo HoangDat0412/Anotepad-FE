@@ -34,7 +34,7 @@ export default function RichNote() {
   const statusRef = useRef(null)
 
   // const folderRef = useRef(params.folderid)
-  const [folderRef,setFolderRef] = useState(params.folderid)
+  const [folderRef,setFolderRef] = useState(params.folderid || 0)
 
   const password_accessRef = useRef(null)
   const password_editRef = useRef(null)

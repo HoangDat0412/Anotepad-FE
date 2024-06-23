@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux'
 // import { setShowSidebar } from '../../redux/features/loading/loadingSlice'
 import { getUserInfomation, logoutActionApi, registerCookieActionApi } from '../../redux/features/user/userSlice'
 
+
 import logo from '../../assests/img/logo.png'
 import Search from '../../pages/Search/Search'
 import Footer from '../../components/Footer/Footer'
@@ -69,13 +70,6 @@ export default function HomeTemplate() {
                 </span>
               </div>
 
-              {/* <NavLink to='/managernote' className="tree__action sidebar__action">
-                <span aria-current="page" className="tree__link nuxt-link-exact-active nuxt-link-active">
-                  <i className="tree__icon fa-solid fa-file"></i>
-                  <span className="tree__link-text"><span className="sidebar__item-name">Manager Note</span></span>
-                </span>
-              </NavLink> */}
-
               <NavLink to='/features' className="tree__action sidebar__action">
                 <span aria-current="page" className="tree__link nuxt-link-exact-active nuxt-link-active">
                   <i className="tree__icon fa-solid fa-fire"></i>
@@ -111,6 +105,9 @@ export default function HomeTemplate() {
             </div>
         </div>
       </nav>
+
+
+
       <div className="col content" style={{ marginTop: "100px" }}>
         <Outlet />
       </div>

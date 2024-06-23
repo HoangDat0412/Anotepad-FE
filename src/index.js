@@ -6,6 +6,7 @@ import { Provider } from "react-redux";
 import { store } from "./redux/store";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+// import 'antd/dist/antd.css';
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import AdminTemplate from "./templates/AdminTemplate/AdminTemplate";
 import HomeTemplate from "./templates/HomeTemplate/HomeTemplate";
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
+        element: <RichNote />,
+      },
+      {
+        path: "/folder",
         element: <Folder />,
       },
       {
